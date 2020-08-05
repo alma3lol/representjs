@@ -1,0 +1,8 @@
+**/__mocks__/**
+**/__tests__/**
+src
+tsconfig.common.json
+tsconfig.json
+tsconfig.tsbuildinfo
+.babelrc
+jest.config.*

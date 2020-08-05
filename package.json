@@ -1,0 +1,55 @@
+{
+	"name": "@alma3lol/represent",
+	"version": "0.0.1",
+	"description": "A Model-View/(\\-ViewModel)?/ representing package that translate backend structure into frontend.",
+	"main": "index.js",
+	"scripts": {
+		"clean": "node ./scripts/run-clean.js *.tsbuildinfo dist",
+		"build": "tsc",
+		"build:watch": "tsc -w",
+		"test": "jest",
+		"test:watch": "jest --watch",
+		"publish-it": "npm publish"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/alma3lol/representjs.git"
+	},
+	"keywords": [
+		"represent",
+		"react",
+		"modeling",
+		"orm",
+		"odm"
+	],
+	"author": "Omar Almalol",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/alma3lol/representjs/issues"
+	},
+	"homepage": "https://github.com/alma3lol/representjs#readme",
+	"publishConfig": {
+		"access": "public"
+	},
+	"devDependencies": {
+		"@babel/plugin-proposal-class-properties": "^7.8.3",
+		"@babel/plugin-proposal-decorators": "^7.8.3",
+		"@babel/plugin-transform-runtime": "^7.9.6",
+		"@babel/preset-env": "^7.9.6",
+		"@babel/preset-typescript": "^7.9.0",
+		"@types/jest": "^25.2.1",
+		"@types/lodash": "^4.14.150",
+		"@types/node": "^13.13.5",
+		"jest": "^26.0.1",
+		"tslib": "^1.11.1",
+		"typescript": "^3.8.3"
+	},
+	"dependencies": {
+		"axios": "^0.19.2",
+		"dexie": "^2.0.4",
+		"lodash": "^4.17.15",
+		"reflect-metadata": "^0.1.13",
+		"rimraf": "^3.0.2",
+		"rxjs": "^6.5.5"
+	}
+}

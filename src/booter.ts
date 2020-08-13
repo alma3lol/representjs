@@ -1,0 +1,76 @@
+import { Types, Core, Context, Loaders } from '.';
+import { Context as CoreContext } from "./core";
+
+/**
+ * Booter class.
+ * 
+ * Loads contexts & loaders
+ */
+export class Booter extends CoreContext {
+	/**
+	 * This makes the class uninstatiatable (No 'new Booter()')
+	 */
+	private constructor() { super(); }
+	/**
+	 * Instance property for the Singleton pattern
+	 */
+	private static _instance: Booter;
+	/**
+	 * Array of loaders to run when calling [load()](#load)
+	 */
+	private _loaders: Core.Loader[];
+	/**
+	 * Project's root
+	 */
+	project_root: string;
+	/**
+	 * Register contexts & loaders
+	 */
+	private register = () => {
+		this.bind(Types.Booter.Bindings.CORE_CONTEXT_KEY).to(new Context.Core());
+		this.bind(Types.Booter.Bindings.DATASOURCE_CONTEXT_KEY).to(new Context.Datasource());
+		this.bind(Types.Booter.Bindings.MODEL_CONTEXT_KEY).to(new Context.Model());
+		this.bind(Types.Booter.Bindings.REPOSITORY_CONTEXT_KEY).to(new Context.Repository());
+		this.bind(Types.Booter.Bindings.SERVICE_CONTEXT_KEY).to(new Context.Service());
+	}
+	/**
+	 * Boot the booter to load datasources, models, ...etc
+	 */
+	boot = () => {
+		const ctx = this.get(Types.Booter.Bindings.CORE_CONTEXT_KEY);
+		const booted = ctx.has(Types.Context.Core.Bindings.BOOTED_KEY);
+		if (!booted) {
+			ctx.bind(Types.Context.Core.Bindings.PROJECT_ROOT_KEY).to(this.project_root);
+			this._loaders = [
+				new Loaders.Datasources(),
+				new Loaders.Models(),
+				new Loaders.Repositories(),
+				new Loaders.Services()
+			]
+			ctx.bind(Types.Context.Core.Bindings.BOOTED_KEY).to(true);
+		}
+	}
+	/**
+	 * Run loaders to load datasources, models, ...etc
+	 */
+	load = async () => {
+		const ctx = this.get(Types.Booter.Bindings.CORE_CONTEXT_KEY);
+		const loaded = ctx.has(Types.Context.Core.Bindings.LOADED_KEY);
+		if (!loaded) return;
+		ctx.bind(Types.Context.Core.Bindings.LOADED_KEY).to(true);
+		this._loaders.forEach(async loader => await loader.run());
+	}
+	get name() { return "BOOTER"; }
+	/**
+	 * Create or return an instance of the booter. (Singleton pattern)
+	 * 
+	 * @param config Booter's config. (Ignored if the instance is already instantiated)
+	 */
+	static getInstance(): Booter {
+		if (this._instance === undefined) {
+			this._instance = new this();
+			this._instance.register();
+		}
+		return this._instance;
+	}
+}

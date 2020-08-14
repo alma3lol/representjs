@@ -1,5 +1,4 @@
 export * from './binding.core';
-export * from './bindingkey.core';
 export * from './context.core';
 export * from './datasource.core';
 export * from './injector.core';

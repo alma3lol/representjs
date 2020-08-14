@@ -1,7 +1,7 @@
 import { Utils, Types } from '..';
 import { Serializable } from './serializable.core';
 
-export class Model<T extends Model<T>> extends Serializable<T> {
+export class Model<T extends Model<T>> extends Serializable {
 	[name: string]: any;
 	constructor(data: Partial<T>) {
 		super();

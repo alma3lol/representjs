@@ -1,13 +1,12 @@
 import { Types } from '..';
 
-export class Serializable<T> {
+export class Serializable {
 	/**
 	 * Serializes data into an instance of the class
 	 * 
 	 * @param data Data to serialize
 	 */
-	serialize(data: Partial<T>, cls: Types.Common.Class<T>) {
-		return new cls(data);
-	}
-	toJSON = () => JSON.stringify(this);
+	readonly serialize = <T>(data: Partial<T>, cls: Types.Common.Class<T>) => new cls(data);
+	readonly toJSON = () => JSON.stringify(this);
+	toString() { return this.toJSON(); }
 }

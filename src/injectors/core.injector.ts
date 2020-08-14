@@ -1,4 +1,5 @@
 import { Booter, Types } from '..';
+import { BindingKey } from '../core';
 
 
 const ctx = Booter.getInstance().get(Types.Booter.Bindings.CORE_CONTEXT_KEY);
@@ -23,7 +24,7 @@ export namespace Core {
 	 * 
 	 * @param key Binding's key
 	 */
-	export const binding = (key: string): PropertyDecorator => {
+	export const binding = (key: string | BindingKey<Types.Context.Core.ContextType>): PropertyDecorator => {
 		return (): PropertyDescriptor => {
 			return {
 				get: () => ctx.get(key)

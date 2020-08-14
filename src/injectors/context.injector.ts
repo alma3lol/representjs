@@ -1,14 +1,14 @@
-import { Types, Booter } from '..';
+import { Booter, Core } from '..';
 
 /**
  * Inject a context into a property
  * 
- * @param ctx Context's class
+ * @param cls Context's class
  */
 export const context = (
-	ctx: Types.Common.Class<Types.Injectors.Core.ContextTypes>
+	cls: typeof Core.Context
 ): PropertyDecorator => {
-	let context = Booter.getInstance().get(new ctx().name);
+	let context = Booter.getInstance().get(cls.key());
 	return (): PropertyDescriptor => ({
 		get: () => context
 	})

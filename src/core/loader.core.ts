@@ -1,7 +1,7 @@
 import { Utils } from '..';
 
 export abstract class Loader {
-	private _classes: Map<string, any> = new Map();
+	protected _classes: Map<string, any> = new Map();
 	private _files: string[];
 	constructor(
 		private _name: string,

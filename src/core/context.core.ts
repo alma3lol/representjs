@@ -2,7 +2,7 @@ import { Core } from '..';
 
 export abstract class Context {
 	/**
-	 * Map for storing bindings in the context
+	 * A store of bindings in the context
 	 */
 	protected _registery: Map<string, Core.Binding.Value<any>> = new Map();
 	/**

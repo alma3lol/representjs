@@ -34,7 +34,7 @@ export class Booter extends CoreContext {
 		this.bind(Types.Booter.Bindings.SERVICE_CONTEXT_KEY).to(new Context.Service());
 	}
 	/**
-	 * Boot the booter to load datasources, models, ...etc
+	 * Boot to set project's root & instantiate loaders
 	 */
 	boot = () => {
 		const ctx = this.get(Types.Booter.Bindings.CORE_CONTEXT_KEY);
@@ -44,8 +44,6 @@ export class Booter extends CoreContext {
 			this._loaders = [
 				new Loaders.Datasources(),
 				new Loaders.Models(),
-				new Loaders.Repositories(),
-				new Loaders.Services()
 			]
 			ctx.bind(Types.Context.Core.Bindings.BOOTED_KEY).to(true);
 		}
@@ -56,15 +54,13 @@ export class Booter extends CoreContext {
 	load = async () => {
 		const ctx = this.get(Types.Booter.Bindings.CORE_CONTEXT_KEY);
 		const loaded = ctx.has(Types.Context.Core.Bindings.LOADED_KEY);
-		if (!loaded) return;
+		if (loaded) return;
 		ctx.bind(Types.Context.Core.Bindings.LOADED_KEY).to(true);
 		this._loaders.forEach(async loader => await loader.run());
 	}
-	get name() { return "BOOTER"; }
+	static key() { return new Core.BindingKey<string>("BOOTER"); };
 	/**
 	 * Create or return an instance of the booter. (Singleton pattern)
-	 * 
-	 * @param config Booter's config. (Ignored if the instance is already instantiated)
 	 */
 	static getInstance(): Booter {
 		if (this._instance === undefined) {

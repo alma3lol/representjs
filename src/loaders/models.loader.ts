@@ -1,6 +1,8 @@
 import { Core, Injectors, Context, Types } from '..';
 
 export class Models extends Core.Loader {
+	protected _classes: Map<string, typeof Core.Model> = new Map();
+	get classes() { return this._classes; }
 	@Injectors.context(Context.Model)
 	private ctx: Context.Model
 	@Injectors.Core.binding(Types.Context.Core.Bindings.PROJECT_ROOT_KEY)
@@ -14,7 +16,7 @@ export class Models extends Core.Loader {
 	run() {
 		super._run(this._root).then(() => {
 			this.classes.forEach((model, name) => {
-				this.ctx.set(name, model);
+				this.ctx.bind(name).to(model);
 			});
 		});
 	}

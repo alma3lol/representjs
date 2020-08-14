@@ -1,5 +1,4 @@
 import { Core } from '..';
-import { BindingKey } from './bindingkey.core';
 
 export abstract class Context {
 	/**
@@ -16,6 +15,11 @@ export abstract class Context {
 		this._registery.set(key.toString(), binding);
 		return binding;
 	}
+	/**
+	 * Get a binding by key
+	 * 
+	 * @param key Binding's key
+	 */
 	get = <T>(key: Core.BindingKey<T> | string): T => {
 		const binding = this._registery.get(key.toString());
 		if (binding === undefined) throw new Error(`No such key: '${key.toString()}'`);
@@ -34,7 +38,7 @@ export abstract class Context {
 	 */
 	unbind = <T>(key: Core.BindingKey<T> | string) => this._registery.delete(key.toString());
 	/**
-	 * Return context's name
+	 * Return context's key
 	 */
-	abstract get name(): string;
+	static key<T>(): Core.BindingKey<T> { return new Core.BindingKey("CONTEXT"); };
 }

@@ -3,5 +3,5 @@ import { Booter, Common } from '../types';
 
 export class Repository extends Context {
 	protected _registery: Map<string, Binding<Common.Class<CoreRepository>>> = new Map();
-	get name() { return Booter.Bindings.REPOSITORY_CONTEXT_KEY.toString(); }
+	static key() { return Booter.Bindings.REPOSITORY_CONTEXT_KEY; }
 }

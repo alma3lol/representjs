@@ -3,7 +3,7 @@ import Axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 export class API extends Core.Datasource {
 	protected _client: AxiosInstance;
-	constructor(config: AxiosRequestConfig) {
+	constructor(config?: AxiosRequestConfig) {
 		super(config);
 		this._client = Axios.create(config);
 	}

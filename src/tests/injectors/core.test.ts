@@ -2,7 +2,6 @@ import { Injectors, Booter, Context } from "../..";
 
 describe('Injectors', () => {
 	describe('Core', () => {
-		Booter.getInstance({ autoBoot: true });
 		it('should inject booter to a property', () => {
 			class Test {
 				@Injectors.Core.booter()

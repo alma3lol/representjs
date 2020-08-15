@@ -1,4 +1,4 @@
-import { Constructor } from '../types/common.types';
+import { Class } from '../types/common.types';
 import { promisify } from 'util';
 import { basename } from "path";
 const glob = promisify(require('glob'));
@@ -25,7 +25,7 @@ export namespace Loader {
 	 * @returns True if target is a class. False otherwise.
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	export function isClass(target: any): target is Constructor<any> {
+	export function isClass(target: any): target is Class<any> {
 		return (
 			typeof target === 'function' && target.toString().indexOf('class') === 0
 		);

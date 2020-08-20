@@ -3,7 +3,7 @@ import { Serializable } from './serializable.core';
 
 export class Model<T extends Model<T>> extends Serializable {
 	[name: string]: any;
-	constructor(data: Partial<T>) {
+	constructor(data?: Partial<T>) {
 		super();
 		Object.assign(this, data)
 	}

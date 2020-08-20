@@ -1,6 +1,5 @@
 export * as Types from './types';
 export * from './booter';
-export * as Context from './context';
 export * as Core from './core';
 export * as Datasources from './datasources';
 export * as Decorators from './decorators';

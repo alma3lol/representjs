@@ -1,4 +1,4 @@
-import { Context } from '../..';
+import * as Context from '../../context';
 
 export namespace Core {
 	export type ContextTypes =

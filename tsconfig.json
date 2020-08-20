@@ -1,11 +1,14 @@
 {
-  "extends": "./tsconfig.common.json",
-  "compilerOptions": {
-    "outDir": "dist",
-	"rootDir": "src",
-    "composite": true
-  },
-  "include": [
-    "src"
-  ]
+	"extends": "./tsconfig.common.json",
+	"compilerOptions": {
+		"outDir": "dist",
+		"rootDir": "src",
+		"composite": true
+	},
+	"include": [
+		"src"
+	],
+	"exclude": [
+		"**/*.test.ts"
+	]
 }

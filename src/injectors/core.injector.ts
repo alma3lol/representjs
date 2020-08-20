@@ -1,8 +1,8 @@
-import { Booter, Types } from '..';
-import { BindingKey } from '../core';
+import { Types } from '..';
+import { Binding } from '../core';
+import { Booter } from "../booter";
 
 
-const ctx = Booter.getInstance().get(Types.Booter.Bindings.CORE_CONTEXT_KEY);
 
 /**
  * Namespaced core injector
@@ -24,7 +24,8 @@ export namespace Core {
 	 * 
 	 * @param key Binding's key
 	 */
-	export const binding = (key: string | BindingKey<Types.Context.Core.ContextType>): PropertyDecorator => {
+	export const binding = (key: string | Binding.Key<Types.Context.Core.ContextType>): PropertyDecorator => {
+		const ctx = Booter.getInstance().get(Types.Booter.Bindings.CORE_CONTEXT_KEY);
 		return (): PropertyDescriptor => {
 			return {
 				get: () => ctx.get(key)

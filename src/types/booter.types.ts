@@ -1,4 +1,4 @@
-import { Context } from '..';
+import * as Context from '../context';
 import { Binding } from '../core';
 
 export namespace Bindings {

@@ -1,14 +1,14 @@
-import { Booter, Core } from '..';
+import { Booter, Types } from '..';
 
 /**
  * Inject a context into a property
  * 
- * @param cls Context's class
+ * @param key Context's class or key
  */
 export const context = (
-	cls: typeof Core.Context
+	key: Types.Injectors.Context.ContextKeys
 ): PropertyDecorator => {
-	let context = Booter.getInstance().get(cls.key());
+	let context = Booter.getInstance().get(key.key());
 	return (): PropertyDescriptor => ({
 		get: () => context
 	})

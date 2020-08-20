@@ -10,7 +10,7 @@ describe('Core', () => {
 				})
 				test: string;
 			}
-			const testClass = new Test({});
+			const testClass = new Test();
 			expect(Utils.Decorator.Reflector.hasMetadata(Types.Context.Model.Bindings.ID_PROPERTY_KEY.toString(), testClass)).toBeTruthy();
 			expect(testClass.ID).toBe("testing");
 		});

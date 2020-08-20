@@ -1,10 +1,11 @@
 import { Types, Core, Context, Loaders } from '.';
 import { Context as CoreContext } from "./core";
+import { Mappers } from "./orm";
 
 /**
  * Booter class.
  * 
- * Loads contexts & loaders
+ * Instantiates contexts, loaders & mappers
  */
 export class Booter extends CoreContext {
 	/**
@@ -24,9 +25,12 @@ export class Booter extends CoreContext {
 	 */
 	project_root: string;
 	/**
-	 * Register contexts & loaders
+	 * Register contexts, loaders & mappers
 	 */
 	private register = () => {
+		const coreCtx = new Context.Core();
+		coreCtx.bind(Types.Context.Core.Bindings.MODEL_MAPPER_KEY).to(new Mappers.Model());
+		this.bind(Types.Booter.Bindings.CORE_CONTEXT_KEY).to(coreCtx);
 		this.bind(Types.Booter.Bindings.CORE_CONTEXT_KEY).to(new Context.Core());
 		this.bind(Types.Booter.Bindings.DATASOURCE_CONTEXT_KEY).to(new Context.Datasource());
 		this.bind(Types.Booter.Bindings.MODEL_CONTEXT_KEY).to(new Context.Model());
@@ -56,9 +60,9 @@ export class Booter extends CoreContext {
 		const loaded = ctx.has(Types.Context.Core.Bindings.LOADED_KEY);
 		if (loaded) return;
 		ctx.bind(Types.Context.Core.Bindings.LOADED_KEY).to(true);
-		this._loaders.forEach(async loader => await loader.run());
+		this._loaders.forEach(loader => loader.run());
 	}
-	static key() { return new Core.BindingKey<string>("BOOTER"); };
+	static key() { return new Core.Binding.Key<string>("BOOTER"); };
 	/**
 	 * Create or return an instance of the booter. (Singleton pattern)
 	 */

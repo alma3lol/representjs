@@ -1,6 +1,6 @@
 import { Core } from '..';
 
-export abstract class Context {
+export class Context {
 	/**
 	 * A store of bindings in the context
 	 */
@@ -37,8 +37,4 @@ export abstract class Context {
 	 * @param key Binding's key
 	 */
 	unbind = <T>(key: Core.Binding.Key<T> | string) => this._registery.delete(key.toString());
-	/**
-	 * Return context's key
-	 */
-	static key<T>(): Core.Binding.Key<T> { return new Core.Binding.Key("CONTEXT"); };
 }

@@ -8,9 +8,10 @@ export namespace Binding {
 	 */
 	export class Key<ValueType> {
 		constructor(
-			public readonly key: string
+			private _key: string
 		) { }
-		toString() { return this.key; }
+		get key() { return this._key; }
+		toString() { return this._key; }
 	}
 	/**
 	 * Binding value class

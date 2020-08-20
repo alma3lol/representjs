@@ -9,7 +9,7 @@ export const datasource = (config: Types.Core.Datasource.Config): ClassDecorator
 	return (
 		target
 	) => {
-		Utils.Decorator.Reflector.defineMetadata(Types.Context.Datasource.Bindings.NAME_KEY.toString(), config.name, target);
-		Utils.Decorator.Reflector.defineMetadata(Types.Context.Datasource.Bindings.CONFIG_FILENAME_KEY.toString(), config.configFilename, target);
+		Utils.Reflector.defineMetadata(Types.Bindings.Datasource.NAME_KEY.toString(), config.name, target);
+		Utils.Reflector.defineMetadata(Types.Bindings.Datasource.CONFIG_FILENAME_KEY.toString(), config.configFilename, target);
 	}
 }

@@ -8,16 +8,16 @@ export class Model<T extends Model<T>> extends Serializable {
 		Object.assign(this, data)
 	}
 	get ID() {
-		return this[Utils.Decorator.Reflector.getMetadata(Types.Context.Model.Bindings.ID_PROPERTY_KEY.toString(), this)];
+		return this[Utils.Reflector.getMetadata(Types.Bindings.Model.ID_PROPERTY_KEY.toString(), this)];
 	}
 	static getName() {
-		return Utils.Decorator.Reflector.getMetadata(Types.Context.Model.Bindings.NAME_KEY.toString(), this);
+		return Utils.Reflector.getMetadata(Types.Bindings.Model.NAME_KEY.toString(), this);
 	}
 	static getTable() {
-		return Utils.Decorator.Reflector.getMetadata(Types.Context.Model.Bindings.TABLE_KEY.toString(), this);
+		return Utils.Reflector.getMetadata(Types.Bindings.Model.TABLE_KEY.toString(), this);
 	}
 	static getURI() {
-		return Utils.Decorator.Reflector.getMetadata(Types.Context.Model.Bindings.URI_KEY.toString(), this);
+		return Utils.Reflector.getMetadata(Types.Bindings.Model.URI_KEY.toString(), this);
 	}
 	static serialize<T extends Model<T>>(data: Partial<T>) {
 		return this.prototype.serialize(data, this);

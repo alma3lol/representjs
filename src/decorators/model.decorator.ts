@@ -23,11 +23,11 @@ export namespace Model {
 		) => {
 			if (config !== undefined) {
 				if (config.table !== undefined)
-					Utils.Decorator.Reflector.defineMetadata(Types.Context.Model.Bindings.TABLE_KEY.toString(), config.table, target);
+					Utils.Reflector.defineMetadata(Types.Bindings.Model.TABLE_KEY.toString(), config.table, target);
 				if (config.name !== undefined)
-					Utils.Decorator.Reflector.defineMetadata(Types.Context.Model.Bindings.NAME_KEY.toString(), config.name, target);
+					Utils.Reflector.defineMetadata(Types.Bindings.Model.NAME_KEY.toString(), config.name, target);
 				if (config.uri !== undefined)
-					Utils.Decorator.Reflector.defineMetadata(Types.Context.Model.Bindings.URI_KEY.toString(), config.uri, target);
+					Utils.Reflector.defineMetadata(Types.Bindings.Model.URI_KEY.toString(), config.uri, target);
 			}
 		}
 	}
@@ -44,7 +44,7 @@ export namespace Model {
 		): any => {
 			if (config !== undefined) {
 				if (config.id !== undefined && config.id === true)
-					Utils.Decorator.Reflector.defineMetadata(Types.Context.Model.Bindings.ID_PROPERTY_KEY.toString(), propertyKey, target)
+					Utils.Reflector.defineMetadata(Types.Bindings.Model.ID_PROPERTY_KEY.toString(), propertyKey, target)
 				if (config.defaultFn !== undefined || config.default !== undefined) {
 					let val = (config.default !== undefined) ? config.default : uuidv4();
 					const descriptor: PropertyDescriptor = {

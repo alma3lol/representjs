@@ -1,8 +1,18 @@
-import { Types } from '..';
+import { Core, Bindings } from '../types';
+import { Booter } from '..';
 
-export class ORM {
+export namespace ORM {
 	/**
-	 * Relation type
+	 * ORM relation's class
 	 */
-	type: Types.Core.ORM.RelationType;
+	export class Relation {
+		protected mapper = Booter.getInstance().get(Bindings.Core.MODEL_MAPPER_KEY);
+		constructor(
+			protected readonly config: Core.ORM.RelationConfig<any>
+		) { }
+		/**
+		 * Relation type
+		 */
+		type: Core.ORM.RelationType;
+	}
 }

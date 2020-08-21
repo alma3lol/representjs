@@ -1,4 +1,5 @@
-import { Injectors, Booter, Context } from "../..";
+import { Injectors, Booter } from "../..";
+import { String } from "lodash";
 
 describe('Injectors', () => {
 	describe('Core', () => {
@@ -10,13 +11,14 @@ describe('Injectors', () => {
 			const testClass = new Test();
 			expect(testClass.booter).toBeInstanceOf(Booter);
 		});
-		it('should inject context to a property', () => {
+		it('should inject a key\'s value to a property', () => {
+			Booter.getInstance().bind("123").to("123");
 			class Test {
-				@Injectors.context(Context.Core)
-				ctx: Context.Core;
+				@Injectors.Core.binding("123")
+				test: string;
 			}
 			const testClass = new Test();
-			expect(testClass.ctx).toBeInstanceOf(Context.Core);
+			expect(testClass.test).toBe("123");
 		});
 	});
 });

@@ -1,4 +1,4 @@
-export namespace Database {
+export namespace Dexie {
 	export type Config = {
 		database: string
 		stores: any

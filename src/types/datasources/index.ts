@@ -1,1 +1,1 @@
-export * from './database.datasource.types';
+export * from './dexie.datasource.types';

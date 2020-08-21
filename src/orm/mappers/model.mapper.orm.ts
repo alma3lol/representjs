@@ -10,12 +10,12 @@ export class Model extends Context {
 	 * @param key Model's key
 	 * @param cls Model's class
 	 */
-	find = <T extends CoreModel<T>>(key: string, cls: Common.Class<T>): T | undefined => {
-		let model: T | undefined = undefined;
-		this._registery.forEach((value) => {
-			if (value instanceof cls && value.key === key) model = value.value;
+	find = <T extends CoreModel<T>>(key: string, value: any, cls: Common.Class<T>): T | undefined => {
+		let returnModel: T | undefined = undefined;
+		this._registery.forEach((model) => {
+			if (model.value instanceof cls && model.value[key] === value) returnModel = model.value;
 		})
-		return model;
+		return returnModel;
 	}
 	/**
 	 * Find many models in the registery based on an iterator function's result

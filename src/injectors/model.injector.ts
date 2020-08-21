@@ -5,4 +5,4 @@ import { Core, Types } from '..';
  * 
  * @param cls Model's class
  */
-export const model = (cls: Types.Common.Class<typeof Core.Model>) => Core.Injector.createClassInjector(cls);
+export const model = <T extends Core.Model<T>>(cls: Types.Common.Class<T>) => Core.Injector.createClassInjector(cls);

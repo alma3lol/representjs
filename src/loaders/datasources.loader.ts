@@ -1,11 +1,14 @@
-import { Core, Injectors, Context, Types } from '..';
+import { Types, Booter } from '..';
+import { Core } from '../injectors';
+import { Loader, Datasource } from '../core';
+import { API, Dexie } from '../datasources';
 
-export class Datasources extends Core.Loader {
-	protected _classes: Map<string, typeof Core.Datasource> = new Map();
+export class Datasources extends Loader {
+	protected _classes: Map<string, Datasource | API | Dexie> = new Map();
 	get classes() { return this._classes; }
-	@Injectors.context(Context.Datasource)
-	private ctx: Context.Datasource;
-	@Injectors.Core.binding(Types.Context.Core.Bindings.PROJECT_ROOT_KEY)
+	@Core.booter()
+	private booter: Booter;
+	@Core.binding(Types.Bindings.Core.PROJECT_ROOT_KEY)
 	private _root: string;
 	constructor(
 		extension: string = ".datasource.ts",
@@ -16,7 +19,7 @@ export class Datasources extends Core.Loader {
 	run() {
 		super._run(this._root).then(() => {
 			this.classes.forEach((datasource, name) => {
-				this.ctx.bind(name).to(datasource);
+				this.booter.bind(name).to(datasource);
 			});
 		});
 	}

@@ -1,16 +1,23 @@
 import { Booter } from "../../../booter";
 import { Mappers } from "../../../orm";
+import { Model } from "../../../core";
 
 describe('ORM', () => {
 	describe('Mappers', () => {
 		describe('Model', () => {
 			it('should find a model using key & class', () => {
-				class Test1 { }
-				class Test2 { }
+				class Test extends Model<Test> {
+					something: string;
+				}
 				const mapper = Booter.getInstance().get(Mappers.Model.key());
-				mapper.bind<Test1>("123").to(new Test1());
-				mapper.bind<Test1>("321").to(new Test2());
-				expect(mapper.get("123")).toBeInstanceOf(Test1);
+				const testClass = new Test({
+					something: "123"
+				});
+				mapper.bind<Test>("123").to(testClass);
+				const result = mapper.find("something", "123", Test);
+				expect(result).toBeInstanceOf(Test);
+				expect(result.something).toBe("123");
+				expect(result).toEqual(testClass);
 			});
 		});
 	});

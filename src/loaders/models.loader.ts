@@ -1,11 +1,13 @@
-import { Core, Injectors, Context, Types } from '..';
+import { Types, Booter } from '..';
+import * as Injectors from "../injectors";
+import { Loader, Model } from '../core';
 
-export class Models extends Core.Loader {
-	protected _classes: Map<string, typeof Core.Model> = new Map();
+export class Models extends Loader {
+	protected _classes: Map<string, typeof Model> = new Map();
 	get classes() { return this._classes; }
-	@Injectors.context(Context.Model)
-	private ctx: Context.Model
-	@Injectors.Core.binding(Types.Context.Core.Bindings.PROJECT_ROOT_KEY)
+	@Injectors.Core.booter()
+	private booter: Booter;
+	@Injectors.Core.binding(Types.Bindings.Core.PROJECT_ROOT_KEY)
 	private _root: string;
 	constructor(
 		extension: string = ".model.ts",
@@ -16,7 +18,7 @@ export class Models extends Core.Loader {
 	run() {
 		super._run(this._root).then(() => {
 			this.classes.forEach((model, name) => {
-				this.ctx.bind(name).to(model);
+				this.booter.bind(name).to(model);
 			});
 		});
 	}

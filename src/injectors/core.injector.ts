@@ -1,8 +1,5 @@
-import { Types } from '..';
 import { Binding } from '../core';
 import { Booter } from "../booter";
-
-
 
 /**
  * Namespaced core injector
@@ -20,15 +17,14 @@ export namespace Core {
 	}
 
 	/**
-	 * Inject a binding's value from the core context
+	 * Inject a binding's value from the booter
 	 * 
 	 * @param key Binding's key
 	 */
-	export const binding = (key: string | Binding.Key<Types.Context.Core.ContextType>): PropertyDecorator => {
-		const ctx = Booter.getInstance().get(Types.Booter.Bindings.CORE_CONTEXT_KEY);
+	export const binding = <T>(key: string | Binding.Key<T>): PropertyDecorator => {
 		return (): PropertyDescriptor => {
 			return {
-				get: () => ctx.get(key)
+				get: () => Booter.getInstance().get(key)
 			}
 		}
 	}

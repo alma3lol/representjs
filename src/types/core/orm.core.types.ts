@@ -7,7 +7,7 @@ export namespace ORM {
 	 */
 	export type RelationType = "HasMany" | "HasOne" | "BelongsTo";
 	/**
-	 * ORM relation config
+	 * ORM relation base config
 	 */
 	export type RelationConfig<T extends Model<T>> = {
 		/**
@@ -15,13 +15,27 @@ export namespace ORM {
 		 */
 		name?: string
 		/**
-		 * Foriegn key
-		 */
-		key: string
-		/**
 		 * Model's class
 		 */
 		cls: Class<T>
+	}
+	/**
+	 * ORM One Model relation config
+	 */
+	export type OneModelRelationConfig<T extends Model<T>> = RelationConfig<T> & {
+		/**
+		 * Foriegn keys
+		 */
+		keys: Record<keyof T, any>
+	}
+	/**
+	 * ORM Many Models relation config
+	 */
+	export type ManyModelsRelationConfig<T extends Model<T>> = RelationConfig<T> & {
+		/**
+		 * A function to validate models
+		 */
+		iteratorFn: (model: T) => boolean
 	}
 	/**
 	 * Relations metadata type

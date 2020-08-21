@@ -8,7 +8,7 @@ export namespace ORM {
 	export class Relation {
 		protected mapper = Booter.getInstance().get(Bindings.Core.MODEL_MAPPER_KEY);
 		constructor(
-			protected readonly config: Core.ORM.RelationConfig<any>
+			protected readonly config: Core.ORM.ManyModelsRelationConfig<any> | Core.ORM.OneModelRelationConfig<any>
 		) { }
 		/**
 		 * Relation type

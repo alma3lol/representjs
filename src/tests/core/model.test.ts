@@ -11,7 +11,7 @@ describe('Core', () => {
 				test: string;
 			}
 			const testClass = new Test();
-			expect(Utils.Decorator.Reflector.hasMetadata(Types.Context.Model.Bindings.ID_PROPERTY_KEY.toString(), testClass)).toBeTruthy();
+			expect(Utils.Reflector.hasMetadata(Types.Bindings.Model.ID_PROPERTY_KEY.toString(), testClass)).toBeTruthy();
 			expect(testClass.ID).toBe("testing");
 		});
 		it('should return model\'s name', () => {
@@ -19,7 +19,7 @@ describe('Core', () => {
 				name: "testing"
 			})
 			class Test extends Core.Model<Test> { }
-			expect(Utils.Decorator.Reflector.hasMetadata(Types.Context.Model.Bindings.NAME_KEY.toString(), Test)).toBeTruthy();
+			expect(Utils.Reflector.hasMetadata(Types.Bindings.Model.NAME_KEY.toString(), Test)).toBeTruthy();
 			expect(Test.getName()).toBe("testing");
 		});
 		it('should return model\'s table', () => {
@@ -27,7 +27,7 @@ describe('Core', () => {
 				table: "testing"
 			})
 			class Test extends Core.Model<Test> { }
-			expect(Utils.Decorator.Reflector.hasMetadata(Types.Context.Model.Bindings.TABLE_KEY.toString(), Test)).toBeTruthy();
+			expect(Utils.Reflector.hasMetadata(Types.Bindings.Model.TABLE_KEY.toString(), Test)).toBeTruthy();
 			expect(Test.getTable()).toBe("testing");
 		});
 		it('should return model\'s uri', () => {
@@ -35,7 +35,7 @@ describe('Core', () => {
 				uri: "testing"
 			})
 			class Test extends Core.Model<Test> { }
-			expect(Utils.Decorator.Reflector.hasMetadata(Types.Context.Model.Bindings.URI_KEY.toString(), Test)).toBeTruthy();
+			expect(Utils.Reflector.hasMetadata(Types.Bindings.Model.URI_KEY.toString(), Test)).toBeTruthy();
 			expect(Test.getURI()).toBe("testing");
 		});
 	});

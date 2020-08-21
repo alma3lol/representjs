@@ -5,7 +5,6 @@ describe('Booter', () => {
 		const booter = Booter.getInstance()
 		booter.project_root = __dirname;
 		booter.boot();
-		const ctx = booter.get(Types.Booter.Bindings.CORE_CONTEXT_KEY);
-		expect(ctx.get(Types.Context.Core.Bindings.PROJECT_ROOT_KEY)).toBe(__dirname);
+		expect(booter.get(Types.Bindings.Core.PROJECT_ROOT_KEY)).toBe(__dirname);
 	});
 });

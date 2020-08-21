@@ -24,9 +24,9 @@ describe('Core', () => {
 					throw new Error("Method not implemented.");
 				}
 			}
-			expect(Utils.Decorator.Reflector.hasMetadata(Types.Context.Datasource.Bindings.NAME_KEY.toString(), Test)).toBeTruthy();
+			expect(Utils.Reflector.hasMetadata(Types.Bindings.Datasource.NAME_KEY.toString(), Test)).toBeTruthy();
 			expect(Test.getName()).toBe("testing");
-			expect(Utils.Decorator.Reflector.hasMetadata(Types.Context.Datasource.Bindings.CONFIG_FILENAME_KEY.toString(), Test)).toBeTruthy();
+			expect(Utils.Reflector.hasMetadata(Types.Bindings.Datasource.CONFIG_FILENAME_KEY.toString(), Test)).toBeTruthy();
 			expect(Test.getConfigFilename()).toBe("testing");
 		});
 	});

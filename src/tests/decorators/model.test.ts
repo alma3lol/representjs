@@ -7,14 +7,14 @@ describe('Decorators', () => {
 				name: "test"
 			})
 			class Test { }
-			expect(Utils.Decorator.Reflector.hasMetadata(Types.Context.Model.Bindings.NAME_KEY.toString(), Test)).toBeTruthy();
+			expect(Utils.Reflector.hasMetadata(Types.Bindings.Model.NAME_KEY.toString(), Test)).toBeTruthy();
 		});
 		it('should configure models', () => {
 			@Decorators.Model.config({
 				name: "test"
 			})
 			class Test { }
-			expect(Utils.Decorator.Reflector.hasMetadata(Types.Context.Model.Bindings.NAME_KEY.toString(), Test)).toBeTruthy();
+			expect(Utils.Reflector.hasMetadata(Types.Bindings.Model.NAME_KEY.toString(), Test)).toBeTruthy();
 		});
 		it('should decorate class\'s property', () => {
 			class Test {
@@ -24,7 +24,7 @@ describe('Decorators', () => {
 				})
 				test: string;
 			}
-			expect(Utils.Decorator.Reflector.hasMetadata(Types.Context.Model.Bindings.ID_PROPERTY_KEY.toString(), new Test())).toBeTruthy();
+			expect(Utils.Reflector.hasMetadata(Types.Bindings.Model.ID_PROPERTY_KEY.toString(), new Test())).toBeTruthy();
 			expect(new Test().test).toBe("testing");
 		});
 	});

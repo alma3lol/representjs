@@ -10,10 +10,16 @@ export class Model extends Context {
 	 * @param key Model's key
 	 * @param cls Model's class
 	 */
-	find = <T extends CoreModel<T>>(key: string, value: any, cls: Common.Class<T>): T | undefined => {
+	find = <T extends CoreModel<T>>(keys: Record<keyof T, any>, cls: Common.Class<T>): T | undefined => {
 		let returnModel: T | undefined = undefined;
 		this._registery.forEach((model) => {
-			if (model.value instanceof cls && model.value[key] === value) returnModel = model.value;
+			if (model.value instanceof cls) {
+				let thisModel = true;
+				Object.keys(keys).forEach(key => {
+					if (model.value[key] !== keys[key]) thisModel = false;
+				});
+				if (thisModel) returnModel = model.value;
+			}
 		})
 		return returnModel;
 	}
@@ -25,8 +31,8 @@ export class Model extends Context {
 	 */
 	findMany = <T extends CoreModel<T>>(cls: Common.Class<T>, iteratorFn: (model: T) => boolean): T[] => {
 		const models: T[] = [];
-		this._registery.forEach((value) => {
-			if (value.value instanceof cls && iteratorFn(value.value)) models.push(value.value);
+		this._registery.forEach((model) => {
+			if (model.value instanceof cls && iteratorFn(model.value)) models.push(model.value);
 		})
 		return models;
 	}

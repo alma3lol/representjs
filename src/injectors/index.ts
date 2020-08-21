@@ -1,5 +1,4 @@
 export * from './config.injector';
-export * from './context.injector';
 export * from './core.injector';
 export * from './datasource.injector';
 export * from './model.injector';

@@ -5,8 +5,7 @@ describe('Core', () => {
 	describe('Service', () => {
 		it('should create an instance of service', () => {
 			class TestDS extends Datasources.API { }
-			class TestModel extends Core.Model<TestModel> { }
-			const service = new Core.Service<TestModel>(new TestDS())
+			const service = new Core.Service(new TestDS())
 			expect(service).toBeInstanceOf(Core.Service);
 		});
 	});

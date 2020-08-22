@@ -18,39 +18,25 @@ export namespace ORM {
 		 * Model's class
 		 */
 		cls: Class<T>
-	}
-	/**
-	 * ORM One Model relation config
-	 */
-	export type OneModelRelationConfig<T extends Model<T>> = RelationConfig<T> & {
 		/**
-		 * Foriegn keys
+		 * Relation's key
 		 */
-		keys: Record<keyof T, any>
-	}
-	/**
-	 * ORM Many Models relation config
-	 */
-	export type ManyModelsRelationConfig<T extends Model<T>> = RelationConfig<T> & {
-		/**
-		 * A function to validate models
-		 */
-		iteratorFn: (model: T) => boolean
+		key: string
 	}
 	/**
 	 * Relations metadata type
 	 */
-	export type MetadataType = Map<string, CoreORM.Relation>
+	export type MetadataType = Map<string, typeof CoreORM.Relation>
 	/**
 	 * One object model relation interface
 	 */
 	export interface OneModelRelation<T extends Model<T>> {
-		toModel: () => T | undefined;
+		toModel: (target: T) => T | undefined;
 	}
 	/**
 	 * Many object models relation interface
 	 */
 	export interface ManyModelsRelation<T extends Model<T>> {
-		toModels: () => T[];
+		toModels: (target: T) => T[];
 	}
 }

@@ -1,0 +1,24 @@
+import { Booter, ORM, Core, Decorators } from '../..';
+
+describe('ORM', () => {
+	describe('HasOne', () => {
+		it('should return a model from the relation', () => {
+			class Test extends Core.Model<Test> {
+				@Decorators.Model.property({
+					id: true,
+					default: "123"
+				})
+				id: string;
+			}
+			const mapper = Booter.getInstance().get(ORM.Mappers.Model.key())
+			const testClass = new Test();
+			mapper.bind<Test>("123").to(testClass);
+			const relation = new ORM.HasOne({
+				cls: Test,
+				key: "id"
+			})
+			expect(relation.toModel(testClass)).toBeInstanceOf(Test);
+			expect(relation.toModel(testClass)?.id).toBe("123");
+		});
+	});
+});

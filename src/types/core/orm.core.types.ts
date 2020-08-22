@@ -26,7 +26,7 @@ export namespace ORM {
 	/**
 	 * Relations metadata type
 	 */
-	export type MetadataType = Map<string, typeof CoreORM.Relation>
+	export type MetadataType<T extends Model<T>> = Map<string, CoreORM.Relation<T>>
 	/**
 	 * One object model relation interface
 	 */

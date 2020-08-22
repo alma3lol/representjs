@@ -49,7 +49,7 @@ export namespace Model {
 		/**
 		 * Default property's value.
 		 * 
-		 * Overwrites assigned values & [defaultFn](#ModelPropertyConfig.defaultFn)
+		 * Overrides assigned values & [defaultFn](#ModelPropertyConfig.defaultFn)
 		 */
 		default?: any
 	}

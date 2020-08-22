@@ -7,3 +7,4 @@ tsconfig.tsbuildinfo
 .babelrc
 jest.config.*
 .vs*
+dist/tests

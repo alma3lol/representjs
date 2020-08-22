@@ -37,4 +37,8 @@ export class Context {
 	 * @param key Binding's key
 	 */
 	unbind = <T>(key: Core.Binding.Key<T> | string) => this._registery.delete(key.toString());
+	/**
+	 * Clears context's registery
+	 */
+	clear = () => this._registery.clear();
 }

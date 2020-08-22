@@ -1,4 +1,4 @@
-import { Binding, ORM } from '../../Core';
+import { Binding, ORM } from '../../core';
 
 export namespace Model {
 	export const TABLE_KEY = new Binding.Key<string>("MODEL.TABLE");

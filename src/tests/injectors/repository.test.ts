@@ -1,5 +1,5 @@
 import { Injectors, Core, Datasources } from "../..";
-import indexeddb from 'fake-indexeddb';
+var indexedDB = require("fake-indexeddb");
 
 describe('Injectors', () => {
 	describe('Repository', () => {
@@ -14,7 +14,7 @@ describe('Injectors', () => {
 						version: 1
 					},
 					{
-						indexedDB: indexeddb
+						indexedDB
 					}
 				)
 				repository: Core.Repository;

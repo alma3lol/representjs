@@ -1,42 +1,28 @@
-import { Core, Decorators, Utils, Types } from "../..";
+import { Core, Decorators, Types } from "../..";
 
 describe('Core', () => {
 	describe('Model', () => {
+		@Decorators.model({
+			table: "table",
+			uri: "uri"
+		})
+		class Test extends Core.Model<Test> {
+			@Decorators.Model.ID({
+				type: String,
+				default: "testing"
+			})
+			test: string;
+		}
+		const testClass = new Test();
 		it('should return id property\'s value', () => {
-			class Test extends Core.Model<Test> {
-				@Decorators.Model.property({
-					id: true,
-					default: "testing"
-				})
-				test: string;
-			}
-			const testClass = new Test();
-			expect(Utils.Reflector.hasMetadata(Types.Bindings.Model.ID_PROPERTY_KEY.toString(), testClass)).toBeTruthy();
 			expect(testClass.ID).toBe("testing");
 		});
-		it('should return model\'s name', () => {
-			@Decorators.model({
-				name: "testing"
-			})
-			class Test extends Core.Model<Test> { }
-			expect(Utils.Reflector.hasMetadata(Types.Bindings.Model.NAME_KEY.toString(), Test)).toBeTruthy();
-			expect(Test.getName()).toBe("testing");
-		});
-		it('should return model\'s table', () => {
-			@Decorators.model({
-				table: "testing"
-			})
-			class Test extends Core.Model<Test> { }
-			expect(Utils.Reflector.hasMetadata(Types.Bindings.Model.TABLE_KEY.toString(), Test)).toBeTruthy();
-			expect(Test.getTable()).toBe("testing");
-		});
-		it('should return model\'s uri', () => {
-			@Decorators.model({
-				uri: "testing"
-			})
-			class Test extends Core.Model<Test> { }
-			expect(Utils.Reflector.hasMetadata(Types.Bindings.Model.URI_KEY.toString(), Test)).toBeTruthy();
-			expect(Test.getURI()).toBe("testing");
+		it('should return name, table, uri & properties using static methods', () => {
+			expect(Test.getName()).toBe("Test");
+			expect(testClass.Name).toBe("Test");
+			expect(testClass.Table).toBe("table");
+			expect(testClass.URI).toBe("uri");
+			expect(Test.getSubKey(testClass.Name, Types.Bindings.Model.ID_PROPERTY_KEY)?.value).toBe("test");
 		});
 	});
 });

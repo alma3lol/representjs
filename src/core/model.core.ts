@@ -33,10 +33,10 @@ export class Model<T extends Model<T>> extends Serializable {
 		return this.constructor.name;
 	}
 	get Table() {
-		return Model.getSubKey(this.Name, Types.Bindings.Model.TABLE_KEY)?.value;
+		return Model.getSubKey(this.Name, Types.Bindings.Model.TABLE_KEY)?.value as string;
 	}
 	get URI() {
-		return Model.getSubKey(this.Name, Types.Bindings.Model.URI_KEY)?.value;
+		return Model.getSubKey(this.Name, Types.Bindings.Model.URI_KEY)?.value as string;
 	}
 	static serialize<T extends Model<T>>(data: Partial<T>) {
 		return this.prototype.serialize(data, this);

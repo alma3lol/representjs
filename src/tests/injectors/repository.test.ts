@@ -10,7 +10,6 @@ describe('Injectors', () => {
 					TestDS,
 					{
 						database: "",
-						stores: "",
 						version: 1
 					},
 					{

@@ -1,12 +1,22 @@
 import DexieModule, { DexieOptions } from 'dexie';
-import { Types, Core } from '..';
+import { Types, Core, Booter, Utils } from '..';
 
 export class Dexie extends Core.Datasource {
 	protected _connection: DexieModule;
 	constructor(config: Types.Datasources.Dexie.Config, options?: DexieOptions) {
 		super(config)
 		this._connection = new DexieModule(config.database, options);
-		this._connection.version(config.version).stores(config.stores);
+		const stores: {
+			[tableName: string]: string
+		} = {};
+		const models = Booter.getInstance().get(Types.Bindings.Core.MODELS_KEY);
+		models.forEach(model => {
+			const schema = Utils.Datasources.generateDexieStore(model);
+			Object.keys(schema).forEach(key => {
+				stores[key] = schema[key];
+			})
+		})
+		this._connection.version(config.version).stores(stores);
 	}
 	get connection() { return this._connection; }
 	open = () => this._connection.open();

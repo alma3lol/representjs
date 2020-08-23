@@ -2,11 +2,7 @@ import { Utils, Types, Decorators, Core } from "../..";
 
 describe('Core', () => {
 	describe('Datasource', () => {
-		it('should return datasource\'s name & configuration filename', () => {
-			@Decorators.datasource({
-				name: "testing",
-				configFilename: "testing"
-			})
+		it('should return datasource\'s name', () => {
 			class Test extends Core.Datasource {
 				find<T extends Core.Model<T>>(uri: string, filter: any): Promise<T[]> {
 					throw new Error("Method not implemented.");
@@ -24,10 +20,8 @@ describe('Core', () => {
 					throw new Error("Method not implemented.");
 				}
 			}
-			expect(Utils.Reflector.hasMetadata(Types.Bindings.Datasource.NAME_KEY.toString(), Test)).toBeTruthy();
-			expect(Test.getName()).toBe("testing");
-			expect(Utils.Reflector.hasMetadata(Types.Bindings.Datasource.CONFIG_FILENAME_KEY.toString(), Test)).toBeTruthy();
-			expect(Test.getConfigFilename()).toBe("testing");
+			expect(Test.getName()).toBe("Test");
+			expect(new Test({}).Name).toBe("Test");
 		});
 	});
 });

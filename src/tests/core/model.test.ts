@@ -15,14 +15,17 @@ describe('Core', () => {
 		}
 		const testClass = new Test();
 		it('should return id property\'s value', () => {
-			expect(testClass.ID).toBe("testing");
+			expect(testClass.ID_PROPERTY).toBe("testing");
 		});
-		it('should return name, table, uri & properties using static methods', () => {
+		it('should return name, table, uri & properties using static/non-static methods', () => {
 			expect(Test.getName()).toBe("Test");
-			expect(testClass.Name).toBe("Test");
-			expect(testClass.Table).toBe("table");
-			expect(testClass.URI).toBe("uri");
-			expect(Test.getSubKey(testClass.Name, Types.Bindings.Model.ID_PROPERTY_KEY)?.value).toBe("test");
+			expect(testClass.ModelName).toBe("Test");
+			expect(testClass.ModelTable).toBe("table");
+			expect(testClass.ModelURI).toBe("uri");
+			expect(Test.getSubKey(testClass.ModelName, Types.Bindings.Model.ID_PROPERTY_KEY)?.value).toBe("test");
+		});
+		it('should convert model to object', () => {
+			expect(testClass.toObject()).toEqual({ test: "testing" });
 		});
 	});
 });

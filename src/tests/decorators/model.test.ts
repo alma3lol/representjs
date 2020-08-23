@@ -27,7 +27,7 @@ describe('Decorators', () => {
 				test: string;
 			}
 			const testClass = new Test();
-			expect(Core.Model.getSubKey(testClass.Name, Types.Bindings.Model.ID_PROPERTY_KEY)?.value).toBeTruthy();
+			expect(Core.Model.getSubKey(testClass.ModelName, Types.Bindings.Model.ID_PROPERTY_KEY)?.value).toBeTruthy();
 			expect(testClass.test).toBe("testing");
 		});
 	});

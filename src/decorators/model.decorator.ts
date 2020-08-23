@@ -40,7 +40,7 @@ export namespace Model {
 				let val = (config.default !== undefined) ? config.default : uuidv4();
 				const descriptor: PropertyDescriptor = {
 					get: () => val,
-					set: (v) => val = v
+					set: () => { }
 				}
 				return descriptor;
 			}
@@ -62,14 +62,14 @@ export namespace Model {
 					let val = (config.default !== undefined) ? config.default : uuidv4();
 					const descriptor: PropertyDescriptor = {
 						get: () => val,
-						set: (v) => val = v
+						set: () => { }
 					}
 					return descriptor;
 				}
 			} else {
-				const properties: string[] = Core.Model.getSubKey(target.Name, Types.Bindings.Model.PROPERTIES_KEY)?.value ?? [];
+				const properties: string[] = Core.Model.getSubKey(target.ModelName, Types.Bindings.Model.PROPERTIES_KEY)?.value ?? [];
 				if (!properties.includes(propertyKey.toString())) properties.push(propertyKey.toString());
-				Core.Model.bind(target.Name, Types.Bindings.Model.PROPERTIES_KEY).to(properties);
+				Core.Model.bind(target.ModelName, Types.Bindings.Model.PROPERTIES_KEY).to(properties);
 			}
 		}
 	}

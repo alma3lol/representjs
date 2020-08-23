@@ -1,14 +1,14 @@
-import { Utils, Types, Core, Booter, ORM } from '..';
+import { Types, Core, Booter, ORM } from '..';
 
 export abstract class Datasource {
 	protected mapper = Booter.getInstance().get(ORM.Mappers.Model.key());
 	constructor(private _config: any) { }
 	get config() { return this._config; }
-	static getName() {
-		return Utils.Reflector.getMetadata(Types.Bindings.Datasource.NAME_KEY.toString(), this);
+	get Name() {
+		return this.constructor.name;
 	}
-	static getConfigFilename() {
-		return Utils.Reflector.getMetadata(Types.Bindings.Datasource.CONFIG_FILENAME_KEY.toString(), this);
+	static getName() {
+		return this.name;
 	}
 	abstract find<T extends Core.Model<T>>(uri: string, filter: Types.Thirdparty.Filter<T>): Promise<T[]>;
 	abstract findById<T extends Core.Model<T>>(uri: string, id: string | number): Promise<T | undefined>;

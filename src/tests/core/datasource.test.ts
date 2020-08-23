@@ -11,7 +11,7 @@ describe('Core', () => {
 				find<T extends Core.Model<T>>(uri: string, filter: any): Promise<T[]> {
 					throw new Error("Method not implemented.");
 				}
-				findById<T extends Core.Model<T>>(uri: string, id: string | number): Promise<T> {
+				findById<T extends Core.Model<T>>(uri: string, id: string | number): Promise<T | undefined> {
 					throw new Error("Method not implemented.");
 				}
 				create<T extends Core.Model<T>>(uri: string, model: T): Promise<T> {

@@ -24,6 +24,7 @@ export class Booter extends Context {
 	 * Register mappers
 	 */
 	private register = () => {
+		this.bind(Types.Bindings.Core.MODELS_KEY).to([]);
 		this.bind(Types.Bindings.Core.MODEL_MAPPER_KEY).to(new Mappers.Model());
 	}
 	/**

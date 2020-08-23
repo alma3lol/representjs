@@ -3,9 +3,13 @@ import { Booter, ORM, Core, Decorators } from '../..';
 describe('ORM', () => {
 	describe('BelongsTo', () => {
 		it('should return a model from the relation', () => {
+			@Decorators.model({
+				table: "table",
+				uri: "uri"
+			})
 			class Test extends Core.Model<Test> {
-				@Decorators.Model.property({
-					id: true,
+				@Decorators.Model.ID({
+					type: String,
 					default: "123"
 				})
 				test: string;

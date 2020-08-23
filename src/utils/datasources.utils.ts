@@ -6,14 +6,14 @@ export namespace Datasources {
 	export const generateDexieStore = <T extends Model<T>>(model: T | Types.Common.Class<T>): { [tableName: string]: string } => {
 		let store: { [tableName: string]: string } = {};
 		if (model instanceof Model) {
-			if (model.Table) {
+			if (model.ModelTable) {
 				let schema = "";
-				if (typeof model.ID === "number") schema = "++";
+				if (typeof model.ID_PROPERTY === "number") schema = "++";
 				else schema = "&";
-				schema += Model.getSubKey(model.Name, Types.Bindings.Model.ID_PROPERTY_KEY)?.value;
-				const properties = Model.getSubKey(model.Name, Types.Bindings.Model.PROPERTIES_KEY)?.value ?? [];
+				schema += Model.getSubKey(model.ModelName, Types.Bindings.Model.ID_PROPERTY_KEY)?.value;
+				const properties = Model.getSubKey(model.ModelName, Types.Bindings.Model.PROPERTIES_KEY)?.value ?? [];
 				properties.forEach(property => schema += `,${property}`);
-				store[model.Table] = schema;
+				store[model.ModelTable] = schema;
 			}
 		} else {
 			const table = Model.getSubKey(model.name, Types.Bindings.Model.TABLE_KEY)?.value

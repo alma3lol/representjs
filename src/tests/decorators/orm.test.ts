@@ -12,8 +12,8 @@ describe('Decorators', () => {
 		})
 		it('should inject a relation into model\'s metadata', () => {
 			class Test extends Core.Model<TestModel> {
-				@Decorators.Model.property({
-					id: true,
+				@Decorators.Model.ID({
+					type: String,
 					default: "123"
 				})
 				id: string;
@@ -30,8 +30,8 @@ describe('Decorators', () => {
 		});
 		it('should auto-resolve relation\'s value', () => {
 			class Test extends Core.Model<TestModel> {
-				@Decorators.Model.property({
-					id: true,
+				@Decorators.Model.ID({
+					type: String,
 					default: "123"
 				})
 				id: string;

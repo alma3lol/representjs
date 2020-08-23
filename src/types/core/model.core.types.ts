@@ -6,15 +6,11 @@ export namespace Model {
 		/**
 		 * Table name to use when fetching/storing into databases
 		 */
-		table?: string
-		/**
-		 * Name to identify the model. (optional)
-		 */
-		name?: string
+		table: string
 		/**
 		 * API's URI to use when performing CRUD operations
 		 */
-		uri?: string
+		uri: string
 	}
 
 	/**
@@ -34,12 +30,6 @@ export namespace Model {
 	 * ```
 	 */
 	export type PropertyConfig = {
-		/**
-		 * Marks the property as ID.
-		 * 
-		 * SHOULD ONLY BE USED ONCE PER MODEL
-		 */
-		id?: boolean
 		/**
 		 * Default property value's generator function.
 		 * 

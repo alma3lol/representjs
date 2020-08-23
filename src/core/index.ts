@@ -5,5 +5,4 @@ export * from './injector.core';
 export * from './model.core';
 export * from './orm.core';
 export * from './repository.core';
-export * from './serializable.core';
 export * from './service.core';

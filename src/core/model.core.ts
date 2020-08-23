@@ -1,7 +1,6 @@
-import { Types, Core } from '..';
-import { Serializable } from './serializable.core';
+import { Types, Core, Utils } from '..';
 
-export class Model<T extends Model<T>> extends Serializable {
+export class Model<T extends Model<T>> {
 	protected static _registery: Map<string, { [name: string]: Core.Binding.Value<any> }> = new Map();
 	static bind<T>(name: string, key: Core.Binding.Key<T> | string): Core.Binding.Value<T> {
 		const binding = new Core.Binding.Value(key);
@@ -20,25 +19,40 @@ export class Model<T extends Model<T>> extends Serializable {
 	}
 	[name: string]: any;
 	constructor(data?: Partial<T>) {
-		super();
-		Object.assign(this, data)
+		Object.assign(this, data);
 	}
-	get ID() {
-		return this[Model.getSubKey(this.Name, Types.Bindings.Model.ID_PROPERTY_KEY)?.value ?? "id"];
+	get ID_PROPERTY() {
+		return this[Model.getSubKey(this.ModelName, Types.Bindings.Model.ID_PROPERTY_KEY)?.value ?? "id"];
 	}
 	static getName() {
 		return this.name;
 	}
-	get Name() {
+	get ModelName() {
 		return this.constructor.name;
 	}
-	get Table() {
-		return Model.getSubKey(this.Name, Types.Bindings.Model.TABLE_KEY)?.value as string;
+	get ModelTable() {
+		return Model.getSubKey(this.ModelName, Types.Bindings.Model.TABLE_KEY)?.value as string;
 	}
-	get URI() {
-		return Model.getSubKey(this.Name, Types.Bindings.Model.URI_KEY)?.value as string;
+	get ModelURI() {
+		return Model.getSubKey(this.ModelName, Types.Bindings.Model.URI_KEY)?.value as string;
 	}
-	static serialize<T extends Model<T>>(data: Partial<T>) {
-		return this.prototype.serialize(data, this);
+	static serialize = <T extends Model<T>>(data: Partial<T>, cls: Types.Common.Class<T>) => {
+		return Utils.Core.serialize(cls, data);
+	}
+	/**
+	 * Convert model to JSON string
+	 */
+	toJSON = () => JSON.stringify(this.toObject());
+	/**
+	 * Convert model to Object
+	 */
+	toObject = (): Object => {
+		const properties = Model.getSubKey(this.ModelName, Types.Bindings.Model.PROPERTIES_KEY)?.value.map(value => value) ?? [];
+		const id_property = Model.getSubKey(this.ModelName, Types.Bindings.Model.ID_PROPERTY_KEY)?.value ?? "";
+		properties.push(id_property);
+		console.log(properties);
+		const data: any = {};
+		properties.forEach(property => data[property] = this[property]);
+		return data
 	}
 }

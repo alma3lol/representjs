@@ -1,5 +1,5 @@
 import { Injectors, Core, Datasources } from "../..";
-var indexedDB = require("fake-indexeddb");
+import "fake-indexeddb/auto";
 
 describe('Injectors', () => {
 	describe('Repository', () => {
@@ -9,11 +9,8 @@ describe('Injectors', () => {
 				@Injectors.repository(
 					TestDS,
 					{
-						database: "",
+						database: "test",
 						version: 1
-					},
-					{
-						indexedDB
 					}
 				)
 				repository: Core.Repository;

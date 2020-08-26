@@ -1,4 +1,5 @@
 import { Types, Core, Utils } from '..';
+import { v4 } from 'uuid';
 
 export class Model<T extends Model<T>> {
 	protected static _registery: Map<string, { [name: string]: Core.Binding.Value<any> }> = new Map();
@@ -20,9 +21,17 @@ export class Model<T extends Model<T>> {
 	[name: string]: any;
 	constructor(data?: Partial<T>) {
 		Object.assign(this, data);
+		if (data) {
+			const properties = Model.getSubKey(this.ModelName, Types.Bindings.Model.PROPERTIES_KEY)?.value.map(value => value) ?? [];
+			const id_property = Model.getSubKey(this.ModelName, Types.Bindings.Model.ID_PROPERTY_KEY)?.value ?? "";
+			properties.push(id_property);
+			properties.forEach(property => this[property] = data[property]);
+		}
 	}
 	get ID_PROPERTY() {
-		return this[Model.getSubKey(this.ModelName, Types.Bindings.Model.ID_PROPERTY_KEY)?.value ?? "id"];
+		const idProperty = Model.getSubKey(this.ModelName, Types.Bindings.Model.ID_PROPERTY_KEY)?.value;
+		if (idProperty === undefined) throw new Error("NO ID PROPERTY ASSIGNED ON CLASS");
+		else return this[idProperty];
 	}
 	static getName() {
 		return this.name;
@@ -36,7 +45,13 @@ export class Model<T extends Model<T>> {
 	get ModelURI() {
 		return Model.getSubKey(this.ModelName, Types.Bindings.Model.URI_KEY)?.value as string;
 	}
-	static serialize = <T extends Model<T>>(data: Partial<T>, cls: Types.Common.Class<T>) => {
+	static getTable() {
+		return Model.getSubKey(this.name, Types.Bindings.Model.TABLE_KEY)?.value as string;
+	}
+	static getURI() {
+		return Model.getSubKey(this.name, Types.Bindings.Model.URI_KEY)?.value as string;
+	}
+	static serialize = <T extends Model<T>>(cls: Types.Common.Class<T>, data?: Partial<T>) => {
 		return Utils.Core.serialize(cls, data);
 	}
 	/**
@@ -50,7 +65,6 @@ export class Model<T extends Model<T>> {
 		const properties = Model.getSubKey(this.ModelName, Types.Bindings.Model.PROPERTIES_KEY)?.value.map(value => value) ?? [];
 		const id_property = Model.getSubKey(this.ModelName, Types.Bindings.Model.ID_PROPERTY_KEY)?.value ?? "";
 		properties.push(id_property);
-		console.log(properties);
 		const data: any = {};
 		properties.forEach(property => data[property] = this[property]);
 		return data

@@ -11,7 +11,6 @@ describe('Datasources', () => {
 			class Test extends Core.Model<Test> {
 				@Decorators.Model.ID({
 					type: String,
-					defaultFn: "uuidv4"
 				})
 				id: string;
 			}

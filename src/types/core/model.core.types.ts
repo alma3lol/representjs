@@ -20,9 +20,7 @@ export namespace Model {
 	 * // Example:
 	 * class Cars extends Model {
 	 *   \@Decorators.Model.property({
-	 *     id: true,
-	 *     defaultFn: "uuidv4",
-	 *     default: "whatever" // Overwrites the above defaultFn
+	 *     default: "whatever"
 	 *   })
 	 *   carId: string
 	 *   // ... SNIP ... //
@@ -31,15 +29,7 @@ export namespace Model {
 	 */
 	export type PropertyConfig = {
 		/**
-		 * Default property value's generator function.
-		 * 
-		 * Currently supported functions: [uuidv4]
-		 */
-		defaultFn?: "uuidv4"
-		/**
-		 * Default property's value.
-		 * 
-		 * Overrides assigned values & [defaultFn](#ModelPropertyConfig.defaultFn)
+		 * Default property's value
 		 */
 		default?: any
 	}

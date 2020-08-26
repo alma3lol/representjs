@@ -41,7 +41,7 @@ export class Dexie extends Core.Datasource {
 	}
 	async create<T extends Core.Model<T>>(cls: Types.Common.Class<T>, data: Partial<T>): Promise<T> {
 		const model = cls.serialize(cls, data);
-		await this._connection.table<T>(cls.getModel()).add(model.toObject(), model.ID_PROPERTY).catch(_ => { });
+		await this._connection.table<T>(cls.getTable()).add(model.toObject(), model.ID_PROPERTY).catch(_ => { });
 		this.mapper.bind<T>(model.ID_PROPERTY).to(model);
 		return model;
 	}

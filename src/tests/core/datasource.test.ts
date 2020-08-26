@@ -4,19 +4,19 @@ describe('Core', () => {
 	describe('Datasource', () => {
 		it('should return datasource\'s name', () => {
 			class Test extends Core.Datasource {
-				find<T extends Core.Model<T>>(uri: string, filter: any): Promise<T[]> {
+				find<T extends Core.Model<T>>(cls: Types.Common.Class<T>, filter: Types.Thirdparty.Filter<T>): Promise<T[]> {
 					throw new Error("Method not implemented.");
 				}
-				findById<T extends Core.Model<T>>(uri: string, id: string | number): Promise<T | undefined> {
+				findById<T extends Core.Model<T>>(cls: Types.Common.Class<T>, id: string | number): Promise<T | undefined> {
 					throw new Error("Method not implemented.");
 				}
-				create<T extends Core.Model<T>>(uri: string, model: T): Promise<T> {
+				create<T extends Core.Model<T>>(cls: Types.Common.Class<T>, data: Partial<T>): Promise<T> {
 					throw new Error("Method not implemented.");
 				}
-				delete(uri: string, idOrFilter: any): Promise<boolean> {
+				delete<T extends Core.Model<T>>(cls: Types.Common.Class<T>, idOrFilter: string | number | Types.Thirdparty.Where<T>): Promise<boolean> {
 					throw new Error("Method not implemented.");
 				}
-				update<T extends Core.Model<T>>(uri: string, model: T, filter?: any): Promise<number> {
+				update<T extends Core.Model<T>>(cls: Types.Common.Class<T>, data: Partial<T>, idOrFilter: string | number | Types.Thirdparty.Where<T>): Promise<number> {
 					throw new Error("Method not implemented.");
 				}
 			}

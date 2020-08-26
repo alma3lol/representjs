@@ -1,5 +1,4 @@
 import { Types, Core, Utils } from '..';
-import { v4 } from 'uuid';
 
 export class Model<T extends Model<T>> {
 	protected static _registery: Map<string, { [name: string]: Core.Binding.Value<any> }> = new Map();

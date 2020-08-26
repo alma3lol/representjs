@@ -1,5 +1,4 @@
-import { Types, Core, Booter } from '..';
-import { v4 as uuidv4 } from "uuid";
+import { Types, Core, Booter, Utils } from '..';
 
 /**
  * Default model decorator. Uses [Model.config](#Model.config)
@@ -29,20 +28,17 @@ export namespace Model {
 		}
 	}
 
-	export const ID = (config: Types.Core.Model.PropertyConfig & { type: Function }): PropertyDecorator => {
+	export const ID = <T extends Core.Model<T>>(config: Types.Core.Model.PropertyConfig & { type: Function }): PropertyDecorator => {
 		return (
 			target,
 			propertyKey
-		) => {
+		): any => {
 			Core.Model.bind(target.constructor.name, Types.Bindings.Model.ID_PROPERTY_KEY).to(propertyKey.toString());
 			Core.Model.bind(target.constructor.name, Types.Bindings.Model.ID_PROPERTY_TYPE_KEY).to(config.type);
-			if (config.defaultFn !== undefined || config.default !== undefined) {
-				let val = (config.default !== undefined) ? config.default : uuidv4();
-				const descriptor: PropertyDescriptor = {
-					get: () => val,
-					set: () => { }
+			if (config.default !== undefined) {
+				return {
+					get: () => config.default
 				}
-				return descriptor;
 			}
 		}
 	}
@@ -58,13 +54,10 @@ export namespace Model {
 			propertyKey: string
 		): any => {
 			if (config !== undefined) {
-				if (config.defaultFn !== undefined || config.default !== undefined) {
-					let val = (config.default !== undefined) ? config.default : uuidv4();
-					const descriptor: PropertyDescriptor = {
-						get: () => val,
-						set: () => { }
+				if (config.default !== undefined) {
+					return {
+						get: () => config.default
 					}
-					return descriptor;
 				}
 			} else {
 				const properties: string[] = Core.Model.getSubKey(target.ModelName, Types.Bindings.Model.PROPERTIES_KEY)?.value ?? [];

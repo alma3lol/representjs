@@ -1,4 +1,4 @@
-import { Class } from '../types/common.types'
+import { Class } from '../types/common.types';
 
 export namespace Core {
 	export const serialize = <T>(cls: Class<T>, data?: Partial<T>): T => {

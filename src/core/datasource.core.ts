@@ -10,9 +10,9 @@ export abstract class Datasource {
 	static getName() {
 		return this.name;
 	}
-	abstract find<T extends Core.Model<T>>(uri: string, filter: Types.Thirdparty.Filter<T>): Promise<T[]>;
-	abstract findById<T extends Core.Model<T>>(uri: string, id: string | number): Promise<T | undefined>;
-	abstract create<T extends Core.Model<T>>(uri: string, model: T): Promise<T>;
-	abstract delete<T extends Core.Model<T>>(uri: string, idOrFilter: string | Types.Thirdparty.Where<T>): Promise<boolean>;
-	abstract update<T extends Core.Model<T>>(uri: string, model: T, filter?: string | Types.Thirdparty.Where<T>): Promise<number>;
+	abstract find<T extends Core.Model<T>>(cls: Types.Common.Class<T>, filter: Types.Thirdparty.Filter<T>): Promise<T[]>;
+	abstract findById<T extends Core.Model<T>>(cls: Types.Common.Class<T>, id: string | number): Promise<T | undefined>;
+	abstract create<T extends Core.Model<T>>(cls: Types.Common.Class<T>, data: Partial<T>): Promise<T>;
+	abstract delete<T extends Core.Model<T>>(cls: Types.Common.Class<T>, idOrFilter: string | number | Types.Thirdparty.Where<T>): Promise<boolean>;
+	abstract update<T extends Core.Model<T>>(cls: Types.Common.Class<T>, data: Partial<T>, idOrFilter: string | number | Types.Thirdparty.Where<T>): Promise<number>;
 }

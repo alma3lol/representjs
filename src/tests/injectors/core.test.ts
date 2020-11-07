@@ -1,5 +1,4 @@
 import { Injectors, Booter } from "../..";
-import { String } from "lodash";
 
 describe('Injectors', () => {
 	describe('Core', () => {

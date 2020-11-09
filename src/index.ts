@@ -6,3 +6,4 @@ export * as Decorators from './decorators';
 export * as Injectors from './injectors';
 export * as ORM from './orm';
 export * as Utils from './utils';
+export * as HoC from './hoc';

@@ -1,6 +1,6 @@
 {
 	"name": "@alma3lol/represent",
-	"version": "0.2.0",
+	"version": "0.2.14",
 	"description": "A Model-View/(\\-ViewModel)?/ representing package that translate backend structure into frontend.",
 	"main": "index.js",
 	"scripts": {
@@ -39,18 +39,20 @@
 		"@babel/preset-env": "^7.9.6",
 		"@babel/preset-typescript": "^7.9.0",
 		"@types/jest": "^25.2.1",
-		"@types/lodash": "^4.14.150",
 		"@types/node": "^13.13.5",
-		"jest": "^26.0.1",
-		"tslib": "^1.11.1",
-		"typescript": "^3.8.3",
 		"fake-indexeddb": "^3.1.2",
+		"jest": "^26.0.1",
+		"rimraf": "^3.0.2",
 		"ts-node": "^8.10.2",
-		"rimraf": "^3.0.2"
+		"tslib": "^1.11.1",
+		"typescript": "^3.8.3"
 	},
 	"dependencies": {
+		"@types/react": "^16.9.56",
 		"axios": "^0.19.2",
 		"dexie": "^3.0.2",
+		"react": "^17.0.1",
 		"reflect-metadata": "^0.1.13"
-	}
+	},
+	"types": "./index.d.ts"
 }

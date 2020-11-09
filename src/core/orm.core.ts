@@ -1,4 +1,4 @@
-import { Core, Bindings } from '../types';
+import { CoreType, Bindings } from '../types';
 import { Booter } from '..';
 import { Model } from './model.core';
 
@@ -9,11 +9,11 @@ export namespace ORM {
 	export class Relation<T extends Model<T>> {
 		protected mapper = Booter.getInstance().get(Bindings.Core.MODEL_MAPPER_KEY);
 		constructor(
-			protected readonly config: Core.ORM.RelationConfig<T>
+			protected readonly config: CoreType.ORM.RelationConfig<T>
 		) { }
 		/**
 		 * Relation type
 		 */
-		type: Core.ORM.RelationType;
+		type: CoreType.ORM.RelationType;
 	}
 }

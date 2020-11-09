@@ -5,7 +5,7 @@ import { Types, Core, Booter, Utils } from '..';
  * 
  * @param config Model's configuration
  */
-export const model = <T extends Core.Model<T>>(config: Types.Core.Model.Config) => Model.config(config);
+export const model = <T extends Core.Model<T>>(config: Types.CoreType.Model.Config) => Model.config(config);
 
 /**
  * A namespaced model decorators
@@ -16,7 +16,7 @@ export namespace Model {
 	 * 
 	 * @param config Model's configuration
 	 */
-	export const config = <T extends Core.Model<T>>(config: Types.Core.Model.Config) => {
+	export const config = <T extends Core.Model<T>>(config: Types.CoreType.Model.Config) => {
 		return (
 			target: Types.Common.Class<T>
 		) => {
@@ -28,7 +28,7 @@ export namespace Model {
 		}
 	}
 
-	export const ID = <T extends Core.Model<T>>(config: Types.Core.Model.PropertyConfig & { type: Function }): PropertyDecorator => {
+	export const ID = <T extends Core.Model<T>>(config: Types.CoreType.Model.PropertyConfig & { type: Function }): PropertyDecorator => {
 		return (
 			target,
 			propertyKey
@@ -48,7 +48,7 @@ export namespace Model {
 	 * 
 	 * @param config Property configuration
 	 */
-	export const property = <T extends Core.Model<T>>(config?: Types.Core.Model.PropertyConfig) => {
+	export const property = <T extends Core.Model<T>>(config?: Types.CoreType.Model.PropertyConfig) => {
 		return (
 			target: T,
 			propertyKey: string

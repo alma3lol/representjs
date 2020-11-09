@@ -3,7 +3,7 @@ import { Types, Core, Booter, Utils } from '..';
 
 export class Dexie extends Core.Datasource {
 	protected _connection: DexieModule;
-	constructor(config: Types.Datasources.Dexie.Config, options?: DexieOptions) {
+	constructor(config: Types.DatasourcesType.Dexie.Config, options?: DexieOptions) {
 		super(config)
 		this._connection = new DexieModule(config.database, options);
 		const stores: {

@@ -2,7 +2,7 @@ import { Types, Utils, Core } from '..';
 import { HasOne, HasMany, BelongsTo } from "../orm";
 
 export namespace ORM {
-	export const relation = <T extends Core.Model<T>>(type: Types.Core.ORM.RelationType, config: Types.Core.ORM.RelationConfig<T>): PropertyDecorator => {
+	export const relation = <T extends Core.Model<T>>(type: Types.CoreType.ORM.RelationType, config: Types.CoreType.ORM.RelationConfig<T>): PropertyDecorator => {
 		switch (type) {
 			case "HasOne":
 				return Relation.hasOne(config);
@@ -15,13 +15,13 @@ export namespace ORM {
 		}
 	}
 	export namespace Relation {
-		const getRelationsFromTarget = <T extends Core.Model<T>>(target: Object): Types.Core.ORM.MetadataType<T> => {
-			let relations: Types.Core.ORM.MetadataType<T> = Utils.Reflector.getMetadata(Types.Bindings.Model.RELATIONS_KEY.toString(), target);
+		const getRelationsFromTarget = <T extends Core.Model<T>>(target: Object): Types.CoreType.ORM.MetadataType<T> => {
+			let relations: Types.CoreType.ORM.MetadataType<T> = Utils.Reflector.getMetadata(Types.Bindings.Model.RELATIONS_KEY.toString(), target);
 			if (relations === undefined) relations = new Map();
 			return relations;
 		}
-		const setRelationsOnTarget = <T extends Core.Model<T>>(target: Object, relations: Types.Core.ORM.MetadataType<T>) => Utils.Reflector.defineMetadata(Types.Bindings.Model.RELATIONS_KEY.toString(), relations, target);
-		export const hasOne = <T extends Core.Model<T>>(config: Types.Core.ORM.RelationConfig<T>): PropertyDecorator => {
+		const setRelationsOnTarget = <T extends Core.Model<T>>(target: Object, relations: Types.CoreType.ORM.MetadataType<T>) => Utils.Reflector.defineMetadata(Types.Bindings.Model.RELATIONS_KEY.toString(), relations, target);
+		export const hasOne = <T extends Core.Model<T>>(config: Types.CoreType.ORM.RelationConfig<T>): PropertyDecorator => {
 			return (
 				target,
 				propertyKey
@@ -35,7 +35,7 @@ export namespace ORM {
 				}
 			}
 		}
-		export const hasMany = <T extends Core.Model<T>>(config: Types.Core.ORM.RelationConfig<T>): PropertyDecorator => {
+		export const hasMany = <T extends Core.Model<T>>(config: Types.CoreType.ORM.RelationConfig<T>): PropertyDecorator => {
 			return (
 				target,
 				propertyKey
@@ -49,7 +49,7 @@ export namespace ORM {
 				}
 			}
 		}
-		export const belongsTo = <T extends Core.Model<T>>(config: Types.Core.ORM.RelationConfig<T>): PropertyDecorator => {
+		export const belongsTo = <T extends Core.Model<T>>(config: Types.CoreType.ORM.RelationConfig<T>): PropertyDecorator => {
 			return (
 				target,
 				propertyKey

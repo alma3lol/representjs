@@ -10,3 +10,4 @@ jest.config.*
 .vs*
 dist/tests
 *.tgz
+cli/

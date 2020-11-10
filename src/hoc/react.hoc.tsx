@@ -21,10 +21,10 @@ class Context {
 
 export const context = new Context();
 
-export const withService = <P extends HoCType.React.WithService = HoCType.React.WithService>(Component: React.ComponentType<P>): React.ComponentType<Omit<P, keyof HoCType.React.WithService>> =>
+export const withService = <P extends HoCType.React.WithService>(Component: React.ComponentType<P>): React.ComponentType<Omit<P, keyof HoCType.React.WithService>> =>
 	(props: Omit<P, keyof HoCType.React.WithService>) =>
 		<Component {...(props as P)} service={context.service} />
 
-export const withRepository = <P extends HoCType.React.WithService = HoCType.React.WithService>(Component: React.ComponentType<P>): React.ComponentType<Omit<P, keyof HoCType.React.WithRepository>> =>
+export const withRepository = <P extends HoCType.React.WithRepository>(Component: React.ComponentType<P>): React.ComponentType<Omit<P, keyof HoCType.React.WithRepository>> =>
 	(props: Omit<P, keyof HoCType.React.WithRepository>) =>
 		<Component {...(props as P)} repository={context.repository} />

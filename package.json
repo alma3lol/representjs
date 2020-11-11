@@ -1,6 +1,6 @@
 {
 	"name": "@alma3lol/represent",
-	"version": "0.2.15",
+	"version": "0.2.16",
 	"description": "A Model-View/(\\-ViewModel)?/ representing package that translate backend structure into frontend.",
 	"main": "index.js",
 	"scripts": {

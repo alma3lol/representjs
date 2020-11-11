@@ -30,7 +30,9 @@ export namespace ORM {
 				const relations = getRelationsFromTarget(target);
 				relations.set(propertyKey.toString(), relation);
 				setRelationsOnTarget(target, relations);
+				const descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
 				return {
+					...descriptor,
 					get: () => relation.toModel(target as T)
 				}
 			}
@@ -44,7 +46,9 @@ export namespace ORM {
 				const relations = getRelationsFromTarget(target);
 				relations.set(propertyKey.toString(), relation);
 				setRelationsOnTarget(target, relations);
+				const descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
 				return {
+					...descriptor,
 					get: () => relation.toModels(target as T)
 				}
 			}
@@ -58,7 +62,9 @@ export namespace ORM {
 				const relations = getRelationsFromTarget(target);
 				relations.set(propertyKey.toString(), relation);
 				setRelationsOnTarget(target, relations);
+				const descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
 				return {
+					...descriptor,
 					get: () => relation.toModel(target as T)
 				}
 			}

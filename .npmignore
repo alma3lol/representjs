@@ -11,3 +11,6 @@ jest.config.*
 dist/tests
 *.tgz
 cli/
+.editorconfig
+scripts/
+.github/

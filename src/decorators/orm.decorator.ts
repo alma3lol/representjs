@@ -1,5 +1,6 @@
 import { Types, Utils, Core } from '..';
 import { HasOne, HasMany, BelongsTo } from "../orm";
+import { Model } from './model.decorator';
 
 export namespace ORM {
 	export const relation = <T extends Core.Model<T>>(type: Types.CoreType.ORM.RelationType, config: Types.CoreType.ORM.RelationConfig<T>): PropertyDecorator => {
@@ -21,19 +22,28 @@ export namespace ORM {
 			return relations;
 		}
 		const setRelationsOnTarget = <T extends Core.Model<T>>(target: Object, relations: Types.CoreType.ORM.MetadataType<T>) => Utils.Reflector.defineMetadata(Types.Bindings.Model.RELATIONS_KEY.toString(), relations, target);
+		const getPropertyDescriptorOrNewDescriptor = (o: any, p: string | number | symbol): PropertyDescriptor => {
+			const descriptor = Object.getOwnPropertyDescriptor(o, p);
+			let propertyValue: any;
+			return (descriptor !== undefined) ? descriptor : {
+				set: (v) => propertyValue = v,
+				get: () => propertyValue
+			}
+		}
 		export const hasOne = <T extends Core.Model<T>>(config: Types.CoreType.ORM.RelationConfig<T>): PropertyDecorator => {
 			return (
 				target,
 				propertyKey
 			): PropertyDescriptor => {
+				Model.property()(target as T, propertyKey as string);
 				const relation = new HasOne(config);
 				const relations = getRelationsFromTarget(target);
 				relations.set(propertyKey.toString(), relation);
 				setRelationsOnTarget(target, relations);
-				const descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
+				const descriptor = getPropertyDescriptorOrNewDescriptor(target, propertyKey);
 				return {
 					...descriptor,
-					get: () => relation.toModel(target as T)
+					get: () => relation.resolveValue(target as T)
 				}
 			}
 		}
@@ -42,14 +52,15 @@ export namespace ORM {
 				target,
 				propertyKey
 			): PropertyDescriptor => {
+				Model.property()(target as T, propertyKey as string);
 				const relation = new HasMany(config);
 				const relations = getRelationsFromTarget(target);
 				relations.set(propertyKey.toString(), relation);
 				setRelationsOnTarget(target, relations);
-				const descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
+				const descriptor = getPropertyDescriptorOrNewDescriptor(target, propertyKey);
 				return {
 					...descriptor,
-					get: () => relation.toModels(target as T)
+					get: () => relation.resolveValues(target as T)
 				}
 			}
 		}
@@ -58,14 +69,14 @@ export namespace ORM {
 				target,
 				propertyKey
 			): PropertyDescriptor => {
+				Model.property()(target as T, propertyKey as string);
 				const relation = new BelongsTo(config);
 				const relations = getRelationsFromTarget(target);
 				relations.set(propertyKey.toString(), relation);
 				setRelationsOnTarget(target, relations);
-				const descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
 				return {
-					...descriptor,
-					get: () => relation.toModel(target as T)
+					set: (value) => relation.updateConfig({ ...config, value: value }),
+					get: () => relation.resolveValue()
 				}
 			}
 		}

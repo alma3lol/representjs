@@ -21,9 +21,9 @@ export class Model<T extends Model<T>> {
 	constructor(data?: Partial<T>) {
 		Object.assign(this, data);
 		if (data) {
-			const properties = Model.getSubKey(this.ModelName, Types.Bindings.Model.PROPERTIES_KEY)?.value.map(value => value) ?? [];
-			const id_property = Model.getSubKey(this.ModelName, Types.Bindings.Model.ID_PROPERTY_KEY)?.value ?? "";
-			properties.push(id_property);
+			const properties = Model.getSubKey(this.ModelName, Types.Bindings.Model.PROPERTIES_KEY)?.value ?? [];
+			const id_property = Model.getSubKey(this.ModelName, Types.Bindings.Model.ID_PROPERTY_KEY)?.value;
+			if (id_property) properties.push(id_property);
 			properties.forEach(property => this[property] = data[property]);
 		}
 	}
@@ -54,16 +54,20 @@ export class Model<T extends Model<T>> {
 		return Utils.Core.serialize(cls, data);
 	}
 	/**
+	 * Convert model to JSON object
+	 */
+	toJSON = () => JSON.parse(JSON.stringify(this.toObject()));
+	/**
 	 * Convert model to JSON string
 	 */
-	toJSON = () => JSON.stringify(this.toObject());
+	toString = () => JSON.stringify(this.toObject());
 	/**
 	 * Convert model to Object
 	 */
 	toObject = (): Object => {
-		const properties = Model.getSubKey(this.ModelName, Types.Bindings.Model.PROPERTIES_KEY)?.value.map(value => value) ?? [];
-		const id_property = Model.getSubKey(this.ModelName, Types.Bindings.Model.ID_PROPERTY_KEY)?.value ?? "";
-		properties.push(id_property);
+		const properties = Model.getSubKey(this.ModelName, Types.Bindings.Model.PROPERTIES_KEY)?.value ?? [];
+		const id_property = Model.getSubKey(this.ModelName, Types.Bindings.Model.ID_PROPERTY_KEY)?.value;
+		if (id_property) properties.push(id_property);
 		const data: any = {};
 		properties.forEach(property => data[property] = this[property]);
 		return data

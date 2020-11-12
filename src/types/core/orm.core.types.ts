@@ -22,6 +22,10 @@ export namespace ORM {
 		 * Relation's key
 		 */
 		key: string
+		/**
+		 * Property's value
+		 */
+		value?: any
 	}
 	/**
 	 * Relations metadata type
@@ -31,12 +35,12 @@ export namespace ORM {
 	 * One object model relation interface
 	 */
 	export interface OneModelRelation<T extends Model<T>> {
-		toModel: (target: T) => T | undefined;
+		resolveValue: (target: T) => T | undefined;
 	}
 	/**
 	 * Many object models relation interface
 	 */
 	export interface ManyModelsRelation<T extends Model<T>> {
-		toModels: (target: T) => T[];
+		resolveValues: (target: T) => T[];
 	}
 }

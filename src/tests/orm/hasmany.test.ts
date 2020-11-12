@@ -21,7 +21,7 @@ describe('ORM', () => {
 				cls: Test,
 				key: "id"
 			})
-			expect(relation.toModels(new Test()).length).toBe(2);
+			expect(relation.resolveValues(new Test()).length).toBe(2);
 		});
 	});
 });

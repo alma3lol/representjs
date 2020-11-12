@@ -21,8 +21,8 @@ describe('ORM', () => {
 				cls: Test,
 				key: "id"
 			})
-			expect(relation.toModel(testClass)).toBeInstanceOf(Test);
-			expect(relation.toModel(testClass)?.id).toBe("123");
+			expect(relation.resolveValue(testClass)).toBeInstanceOf(Test);
+			expect(relation.resolveValue(testClass)?.id).toBe("123");
 		});
 	});
 });

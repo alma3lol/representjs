@@ -1,4 +1,4 @@
-import { Booter, ORM, Core, Decorators } from '../..';
+import { Booter, ORM, Core, Decorators, Types } from '../..';
 
 describe('ORM', () => {
 	describe('BelongsTo', () => {
@@ -14,15 +14,16 @@ describe('ORM', () => {
 				})
 				test: string;
 			}
-			const mapper = Booter.getInstance().get(ORM.Mappers.Model.key())
+			const mapper = Booter.getInstance().get(Types.Bindings.Core.MODEL_MAPPER_KEY)
 			const testClass = new Test();
 			mapper.bind<Test>("123").to(testClass);
 			const relation = new ORM.BelongsTo<Test>({
 				cls: Test,
-				key: "test"
+				key: "test",
+				value: "123"
 			})
-			expect(relation.toModel(testClass)).toBeInstanceOf(Test);
-			expect(relation.toModel(testClass)?.test).toBe("123");
+			expect(relation.resolveValue()).toBeInstanceOf(Test);
+			expect(relation.resolveValue()?.test).toBe("123");
 		});
 	});
 });

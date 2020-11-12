@@ -15,7 +15,7 @@ export class Model extends Context {
 		let returnModel: T | undefined = undefined;
 		this._registery.forEach((model) => {
 			if (model.value instanceof cls && model.value[key] === value) returnModel = model.value;
-		})
+		});
 		return returnModel;
 	}
 	/**

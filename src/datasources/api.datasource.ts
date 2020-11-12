@@ -10,26 +10,23 @@ export class API extends Core.Datasource {
 	get client() { return this._client; }
 	async find<T extends Core.Model<T>>(cls: Types.Common.Class<T>, filter: Types.Thirdparty.Filter<T>): Promise<T[]> {
 		const models: T[] = [];
-		const data = await this._client.get(`${cls.getURI()}/?filter=${JSON.stringify(filter)}`).then(res => res.data) as T[];
+		const data = await this._client.get<T[]>(`${cls.getURI()}/?filter=${JSON.stringify(filter)}`).then(res => res.data);
 		data.forEach(row => {
-			const model = cls.serialize(cls, row);
+			const model = new cls(row);
 			this.mapper.bind<T>(model.ID_PROPERTY).to(model);
 			models.push(model);
 		});
 		return models;
 	}
-	async findById<T extends Core.Model<T>>(cls: Types.Common.Class<T>, id: string | number): Promise<T | undefined> {
-		const data = await this._client.get(`${cls.getURI()}/${id}`).then(res => res.data) as T | undefined;
-		if (data !== undefined) {
-			const model = cls.serialize(cls, data);
-			this.mapper.bind<T>(model.ID_PROPERTY).to(model);
-			return model;
-		}
-		return undefined;
+	async findById<T extends Core.Model<T>>(cls: Types.Common.Class<T>, id: string | number): Promise<T> {
+		const data = await this._client.get<T>(`${cls.getURI()}/${id}`).then(res => res.data);
+		const model = new cls(data);
+		this.mapper.bind<T>(model.ID_PROPERTY).to(model);
+		return model;
 	}
 	async create<T extends Core.Model<T>>(cls: Types.Common.Class<T>, data: Partial<T>): Promise<T> {
-		const model = cls.serialize(cls, data);
-		const returnModel = await this._client.post(`${cls.getURI()}/`, model.toJSON()).then(res => res.data) as T;
+		const model = new cls(data);
+		const returnModel = await this._client.post<T>(`${cls.getURI()}/`, model.toJSON()).then(res => res.data);
 		this.mapper.bind<T>(returnModel.ID_PROPERTY).to(returnModel);
 		return returnModel;
 	}
@@ -44,8 +41,8 @@ export class API extends Core.Datasource {
 		return deleted;
 	}
 	async update<T extends Core.Model<T>>(cls: Types.Common.Class<T>, data: Partial<T>, idOrFilter: string | number | Types.Thirdparty.Where<T>): Promise<number> {
-		const model = cls.serialize(cls, data);
-		const count = await this._client.put(`${cls.getURI()}${(typeof idOrFilter === "string") ? `/${idOrFilter}` : `?where=${JSON.stringify(idOrFilter)}`}`, model.toJSON()).then(res => res.data.count) as number;
+		const model = new cls(data);
+		const count = await this._client.put<{ count: number }>(`${cls.getURI()}${(typeof idOrFilter === "string") ? `/${idOrFilter}` : `?where=${JSON.stringify(idOrFilter)}`}`, model.toJSON()).then(res => res.data.count);
 		if (count) {
 			const keysToUpdate: string[] = [];
 			if (typeof idOrFilter === "string") keysToUpdate.push(idOrFilter);

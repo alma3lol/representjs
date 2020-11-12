@@ -50,9 +50,6 @@ export class Model<T extends Model<T>> {
 	static getURI() {
 		return Model.getSubKey(this.name, Types.Bindings.Model.URI_KEY)?.value as string;
 	}
-	static serialize = <T extends Model<T>>(cls: Types.Common.Class<T>, data?: Partial<T>) => {
-		return Utils.Core.serialize(cls, data);
-	}
 	/**
 	 * Convert model to JSON object
 	 */

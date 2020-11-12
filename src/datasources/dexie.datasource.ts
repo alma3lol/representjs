@@ -24,7 +24,7 @@ export class Dexie extends Core.Datasource {
 		const models: T[] = []
 		const data = await this._connection.table<T>(cls.getTable()).toArray();
 		data.forEach(row => {
-			const model = cls.serialize(cls, row);
+			const model = new cls(row);
 			this.mapper.bind<T>(model.ID_PROPERTY).to(model);
 			models.push(model);
 		});
@@ -33,15 +33,15 @@ export class Dexie extends Core.Datasource {
 	async findById<T extends Core.Model<T>>(cls: Types.Common.Class<T>, key: string | number): Promise<T | undefined> {
 		const data = await this._connection.table<T>(cls.getTable()).get(key).then(v => v) as T | undefined;
 		if (data !== undefined) {
-			const model = cls.serialize(cls, data);
+			const model = new cls(data);
 			this.mapper.bind<T>(model.ID_PROPERTY).to(model);
 			return model;
 		}
 		return undefined;
 	}
 	async create<T extends Core.Model<T>>(cls: Types.Common.Class<T>, data: Partial<T>): Promise<T> {
-		const model = cls.serialize(cls, data);
-		await this._connection.table<T>(cls.getTable()).add(model.toObject(), model.ID_PROPERTY).catch(_ => { });
+		const model = new cls(data);
+		await this._connection.table<T>(cls.getTable()).add(model.toObject() as any, model.ID_PROPERTY).catch(_ => { });
 		this.mapper.bind<T>(model.ID_PROPERTY).to(model);
 		return model;
 	}
@@ -51,7 +51,7 @@ export class Dexie extends Core.Datasource {
 		return deleted;
 	}
 	async update<T extends Core.Model<T>>(cls: Types.Common.Class<T>, data: Partial<T>): Promise<number> {
-		const model = cls.serialize(cls, data);
+		const model = new cls(data);
 		const count = await this._connection.table<T>(cls.getTable()).update(model.ID_PROPERTY, model.toObject()).then(v => v, _ => 0);
 		if (count) {
 			const mappedModel = this.mapper.get<T>(model.ID_PROPERTY) as any;

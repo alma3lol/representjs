@@ -36,8 +36,10 @@ export namespace Model {
 			Core.Model.bind(target.constructor.name, Types.Bindings.Model.ID_PROPERTY_KEY).to(propertyKey.toString());
 			Core.Model.bind(target.constructor.name, Types.Bindings.Model.ID_PROPERTY_TYPE_KEY).to(config.type);
 			if (config.default !== undefined) {
+				let defaultValue = config.default;
 				return {
-					get: () => config.default
+					get: () => defaultValue,
+					set: (value: any) => { if (value !== undefined) defaultValue = value }
 				}
 			}
 		}
@@ -55,14 +57,21 @@ export namespace Model {
 		): any => {
 			if (config !== undefined) {
 				if (config.default !== undefined) {
+					let defaultValue = config.default;
 					return {
-						get: () => config.default
+						get: () => defaultValue,
+						set: (value: any) => { if (value !== undefined) defaultValue = value }
 					}
 				}
 			} else {
 				const properties: string[] = Core.Model.getSubKey(target.ModelName, Types.Bindings.Model.PROPERTIES_KEY)?.value ?? [];
 				if (!properties.includes(propertyKey.toString())) properties.push(propertyKey.toString());
 				Core.Model.bind(target.ModelName, Types.Bindings.Model.PROPERTIES_KEY).to(properties);
+				let defaultValue: any;
+				return {
+					get: () => defaultValue,
+					set: (value: any) => { if (value !== undefined) defaultValue = value }
+				}
 			}
 		}
 	}

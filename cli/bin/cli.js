@@ -15,7 +15,7 @@ CLI.commander.version(pkg.version);
 if (require.main == module) {
 	CLI.commander.parse(process.argv);
 	if (CLI.commander.opts()['dryRun']) CLI.gitter.dryRun = true;
-	if (cli.commander.opts()['signoff']) CLI.gitter.signoff = cli.commander.opts()['signoff'];
+	if (CLI.commander.opts()['signoff']) CLI.gitter.signoff = CLI.commander.opts()['signoff'];
 	const PACKAGE_PATH = path.join(process.cwd(), CLI.commander.opts()['package']);
 	const YARN_LOCK_PATH = path.join(path.dirname(PACKAGE_PATH), "yarn.lock");
 	const NPM_LOCK_PATH = path.join(path.dirname(PACKAGE_PATH), "package-lock.json");

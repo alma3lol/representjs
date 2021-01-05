@@ -2,5 +2,10 @@
 	"preset": "ts-jest",
 	"transform": {
 		"^.+\\.tsx?$": "babel-jest"
-	}
+	},
+	"testPathIgnorePatterns": [
+		"/node_modules/",
+		"/cli/",
+		"/dist/"
+	]
 }

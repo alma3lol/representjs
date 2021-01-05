@@ -9,17 +9,17 @@ export const commander = new Command();
 
 commander.name("represent");
 
-commander.option("-s, --src-dir <srcDir>", "Directory to look for models. [Default: 'src/models']", "src/models");
+commander.option("-s, --src-dir <srcDir>", "Directory to look for models", "src/models");
 
-commander.option("-p, --package <packageFile>", "package.json file path. [Default: './package.json']", "package.json");
+commander.option("-p, --package <packageFile>", "package.json file path", "./package.json");
 
-commander.option("-m, --manager <manager>", "Package manager. Accepts: 'npm', 'yarn', 'autodetect'. [Default: 'autodetect']", "autodetect");
+commander.option("-m, --manager <manager>", "Package manager. Accepts: 'npm', 'yarn', 'autodetect'", "autodetect");
 
 commander.option("--dry-run", "Do not commit. STILL DOES EDITS", false);
 
 commander.option("--signoff <signoff-message>", "Signoff message", "");
 
-commander.command("interactive").description("Interactive mode lets you create/edit/delete multiple models without exiting")
+commander.command("interactive").description("Interactive mode lets you create/update/delete multiple models without exiting")
 	.action(async () => {
 		while(true) {
 			const indexFilePath = `${commander.opts()['srcDir']}/index.ts`;

@@ -7,6 +7,8 @@ import {Prompts} from './prompts';
 
 export const commander = new Command();
 
+commander.name("represent");
+
 commander.option("-s, --src-dir <srcDir>", "Directory to look for models. [Default: 'src/models']", "src/models");
 
 commander.option("-p, --package <packageFile>", "package.json file path. [Default: './package.json']", "package.json");
@@ -17,7 +19,7 @@ commander.option("--dry-run", "Do not commit. STILL DOES EDITS", false);
 
 commander.option("--signoff <signoff-message>", "Signoff message", "");
 
-commander.command("interactive")
+commander.command("interactive").description("Interactive mode lets you create/edit/delete multiple models without exiting")
 	.action(async () => {
 		while(true) {
 			const indexFilePath = `${commander.opts()['srcDir']}/index.ts`;
@@ -100,19 +102,19 @@ commander.command("interactive")
 	})
 	.alias("i");
 
-commander.command("model")
+commander.command("model").description("Create a model then exit")
 	.action(async () => {
 		await Prompts.modelStartAction();
 	})
 	.alias("m");
 
-commander.command("property")
+commander.command("property").description("Add/update/remove a property then exit")
 	.action(async () => {
 		await Prompts.propertiesStartAction();
 	})
 	.alias("p");
 
-commander.command("relation")
+commander.command("relation").description("Add/update/remove a relation then exit")
 	.action(async () => {
 		await Prompts.relationsStartAction();
 	})

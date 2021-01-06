@@ -48,7 +48,7 @@ export namespace Models {
 		const models: string[] = [];
 		files.forEach(file => {
 			models.push(
-				_.startCase(_.toLower(file.split(".")[0])).replace(" ", "")
+				_.startCase(_.toLower(file.split(".")[0])).replace(/\s/g, "")
 			);
 		});
 		return models;

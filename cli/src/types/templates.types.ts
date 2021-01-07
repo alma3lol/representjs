@@ -49,6 +49,10 @@ export namespace Templates {
              * Relation type
              */
             type: 'string' | 'number' | 'array' | 'model'
+            /**
+             * Wether required or not
+             */
+            required: boolean
         }
     }
 }

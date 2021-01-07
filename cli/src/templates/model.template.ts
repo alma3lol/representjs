@@ -142,7 +142,7 @@ ${
 	)
 }
 
-export interface ${_.startCase(name).replace(" ", "")}Props {
+export interface ${_.startCase(name).replace(/\s/g, "")}Props {
 	${
 		_.join(
 			properties.map(prop => `${prop.name}${prop.required ? "" : "?"}: ${prop.type === "string" ? "string" : prop.type === "boolean" ? "boolean" : prop.type === "number" ? "number" : prop.type === "array" ? `${prop.arrType}[]` : "{}"}`),
@@ -152,11 +152,11 @@ export interface ${_.startCase(name).replace(" ", "")}Props {
 	}
 }
 
-export interface ${_.startCase(name).replace(" ", "")}Relations {${
+export interface ${_.startCase(name).replace(/\s/g, "")}Relations {${
 	relations.length > 0 ? `\n\t${
 		_.join(
 			relations.map(
-				relation => `${relation.name}: ${relation.relationship === "belongsTo" ? relation.type : relation.model}${relation.relationship === "hasMany" ? "[]" : ""}`
+				relation => `${relation.name}${relation.required ? "" : "?"}: ${relation.relationship === "belongsTo" ? relation.type : relation.model}${relation.relationship === "hasMany" ? "[]" : ""}`
 			),
 			"\n\t"
 		)
@@ -167,8 +167,8 @@ export interface ${_.startCase(name).replace(" ", "")}Relations {${
 	uri: '${uri}',
 	table: '${table}'
 })
-export class ${_.startCase(name).replace(" ", "")} extends Core.Model<${_.startCase(name).replace(" ", "")}> {
-	constructor(data: ${_.startCase(name).replace(" ", "")}Props) {
+export class ${_.startCase(name).replace(/\s/g, "")} extends Core.Model<${_.startCase(name).replace(/\s/g, "")}> {
+	constructor(data: ${_.startCase(name).replace(/\s/g, "")}Props) {
 		super(data);
 		Object.assign(this, data);
 	}
@@ -196,7 +196,7 @@ export class ${_.startCase(name).replace(" ", "")} extends Core.Model<${_.startC
 						`cls: ${relation.model},`,
 						`key: '${relation.key}'`
 					];
-					return `@Decorators.ORM.Relation.${relation.relationship}({\n\t\t${_.join(relationConfig, "\n\t\t")}\n\t})\n\t${relation.name}!: ${relation.relationship === "hasMany" ? `${relation.model}[]` : relation.relationship === "hasOne" ? relation.model : relation.type};`;
+					return `@Decorators.ORM.Relation.${relation.relationship}({\n\t\t${_.join(relationConfig, "\n\t\t")}\n\t})\n\t${relation.name}${relation.required ? "!" : "?"}: ${relation.relationship === "hasMany" ? `${relation.model}[]` : relation.relationship === "hasOne" ? relation.model : relation.type};`;
 				}),
 				"\n\t"
 			)
@@ -265,7 +265,7 @@ export class ${_.startCase(name).replace(" ", "")} extends Core.Model<${_.startC
 		relationsArr.forEach(relation => {
 			const modelMatches = relation[0].matchAll(/[\r\n \t]+(cls): ([^,]*),?/g);
 			const keyMatches = relation[0].matchAll(/[\r\n \t]+(key): ['"](.*)['"],?/g);
-			const propertyMatches = relation[0].matchAll(/[ \t]+(.*)(!): ([^;]*)/g);
+			const propertyMatches = relation[0].matchAll(/[ \t]+(.*)([!?]): ([^;]*)/g);
 			if (modelMatches && keyMatches && propertyMatches) {
 				const propertyMatch = [...propertyMatches][0];
 				const model = [...modelMatches][0][2];
@@ -275,7 +275,8 @@ export class ${_.startCase(name).replace(" ", "")} extends Core.Model<${_.startC
 					model,
 					key,
 					relationship: relation[1] as any,
-					type: relation[1] === "hasMany" ? "array" : relation[1] === "hasOne" ? "model"  : propertyMatch[3] as any
+					type: relation[1] === "hasMany" ? "array" : relation[1] === "hasOne" ? "model"  : propertyMatch[3] as any,
+					required: propertyMatch[2] === "!"
 				}
 				relations.push(relat);
 			}

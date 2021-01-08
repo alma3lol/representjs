@@ -77,8 +77,8 @@ export namespace Prompts {
 			properties: [],
 			relations: []
 		});
-		modelInstance = await Prompts.newPropertyAction(modelInstance);
-		modelInstance = await Prompts.newRelationAction(modelInstance);
+		modelInstance = await newPropertyAction(modelInstance);
+		modelInstance = await newRelationAction(modelInstance);
 		newIndexContent = Models.appendModelToIndex(indexContent, modelInstance.name);
 		writeFileSync(indexFilePath, newIndexContent);
 		writeFileSync(
@@ -90,13 +90,13 @@ export namespace Prompts {
 	 * Prompt for properties start action
 	 */
 	export const propertiesStartAction = async () => {
-		const modelAction = await Prompts.interactiveStartAction();
+		const modelAction = await interactiveStartAction();
 		const isModel = _.includes(Models.getExistingModels(), modelAction);
 		if (isModel) {
 			const model = ModelTemplate.render(
 				readFileSync(`${commander.opts()['srcDir']}/${Models.generateFileName(modelAction)}.ts`).toString("utf8")
 			);
-			const updatedModelInstance = await Prompts.propertiesAction(model);
+			const updatedModelInstance = await propertiesAction(model);
 			writeFileSync(
 				`${commander.opts()["srcDir"]}/${Models.generateFileName(updatedModelInstance.name)}.ts`,
 				updatedModelInstance.generate()
@@ -109,13 +109,13 @@ export namespace Prompts {
 	 * Prompt for relations start action
 	 */
 	export const relationsStartAction = async () => {
-		const modelAction = await Prompts.interactiveStartAction();
+		const modelAction = await interactiveStartAction();
 		const isModel = _.includes(Models.getExistingModels(), modelAction);
 		if (isModel) {
 			const model = ModelTemplate.render(
 				readFileSync(`${commander.opts()['srcDir']}/${Models.generateFileName(modelAction)}.ts`).toString("utf8")
 			);
-			const updatedModelInstance = await Prompts.relationsAction(model);
+			const updatedModelInstance = await relationsAction(model);
 			writeFileSync(
 				`${commander.opts()["srcDir"]}/${Models.generateFileName(updatedModelInstance.name)}.ts`,
 				updatedModelInstance.generate()
@@ -341,8 +341,13 @@ export namespace Prompts {
 			{
 				name: "action",
 				message: "Choose an action:",
-				type: "list",
-				choices
+				type: "autocomplete",
+				source: (__, input) => {
+					if (input) {
+						return _.filter(choices, (action: any) => action.name.toLowerCase().includes(input.toLowerCase()));
+					}
+					return choices;
+				}
 			}
 		]);
 		return action;
@@ -737,8 +742,13 @@ export namespace Prompts {
 			{
 				name: "action",
 				message: "Choose an action:",
-				type: "list",
-				choices
+				type: "autocomplete",
+				source: (__, input) => {
+					if (input) {
+						return _.filter(choices, (action: any) => action.name.toLowerCase().includes(input.toLowerCase()));
+					}
+					return choices;
+				}
 			}
 		]);
 		return action;
@@ -753,19 +763,20 @@ export namespace Prompts {
 	export const newRelationAction = async (model: ModelTemplate): Promise<ModelTemplate> => {
 		console.clear();
 		const usedClassProps = Models.usedClassProps(model);
-		const relations: { relationName: string, relationType: string, relationship: string, key: string, model: string }[] = [];
+		const relations: { relationName: string, relationType: string, relationship: string, key: string, model: string, required: boolean }[] = [];
 		model.relations.find().forEach(relation => {
 			relations.push({
 				relationType: relation.type,
 				relationName: relation.name,
 				relationship: relation.relationship,
 				model: relation.model,
-				key: relation.key
+				key: relation.key,
+				required: relation.required
 			});
 		});
 		const otherModels = Models.getExistingModels().filter(otherModel => otherModel !== model.name);
 		while(true) {
-			const { relationName, relationship, relationModel } = await Inqueirer.prompt([
+			const { relationName, relationship, relationModel, required } = await Inqueirer.prompt([
 				{
 					name: "relationName",
 					message: "Relation name: ",
@@ -792,7 +803,7 @@ export namespace Prompts {
 							value: "hasMany",
 						},
 						{
-							name: "Belonds To",
+							name: "Belongs To",
 							value: "belongsTo",
 						}
 					],
@@ -800,12 +811,19 @@ export namespace Prompts {
 				},
 				{
 					name: "relationModel",
-					type: "list",
+					type: "autocomplete",
 					message: "Choose a model to relate:",
 					choices: otherModels.map(model => ({
 						name: model,
 						value: model
 					})),
+					when: answer => answer.relationName
+				},
+				{
+					name: "required",
+					type: "confirm",
+					message: "Is it required?",
+					default: true,
 					when: answer => answer.relationName
 				}
 			]);
@@ -826,32 +844,22 @@ export namespace Prompts {
 				{
 					name: "key",
 					message: "Relation model key:",
-					type: "list",
-					choices: relationModelKeys
-				},
-				{
-					name: "relationType",
-					message: "Type: ",
-					type: "list",
-					choices: [
-						{
-							name: "String",
-							value: "string"
-						},
-						{
-							name: "Number",
-							value: "number"
+					type: "autocomplete",
+					source: (__, input) => {
+						if (input) {
+							return _.filter(relationModelKeys, (action: any) => action.name.toLowerCase().includes(input.toLowerCase()));
 						}
-					],
-					when: () => relationship === "belongsTo"
-				},
+						return relationModelKeys;
+					}
+				}
 			]);
 			relations.push({
 				relationName,
 				relationship,
-				relationType: relationship === "belongsTo" ? relation.relationType : relationship === "hasMany" ? "array" : "model",
+				relationType: relationship === "belongsTo" ? relationModelInstance.properties.find(relation.key)[0].type : relationship === "hasMany" ? "array" : "model",
 				model: relationModel,
-				key: relation.key
+				key: relation.key,
+				required
 			});
 			console.log();
 		}
@@ -868,7 +876,8 @@ export namespace Prompts {
 				name: relation.relationName,
 				relationship: relation.relationship as any,
 				model: relation.model,
-				key: relation.key
+				key: relation.key,
+				required: relation.required
 			}
 			updatedModelInstance.relations.add(relat);
 		});
@@ -918,19 +927,25 @@ export namespace Prompts {
 						value: "hasMany",
 					},
 					{
-						name: "Belonds To",
+						name: "Belongs To",
 						value: "belongsTo",
 					}
 				]
 			},
 			{
 				name: "relationModel",
-				type: "list",
+				type: "autocomplete",
 				message: "Choose a model to relate:",
-				choices: otherModels.map(model => ({
-					name: model,
-					value: model
-				}))
+				source: (__, input) => {
+					const choices = otherModels.map(model => ({
+						name: model,
+						value: model
+					}));
+					if (input) {
+						return _.filter(choices, (model: any) => model.name.toLowerCase().includes(input.toLowerCase()));
+					}
+					return choices;
+				}
 			}
 		]);
 		const relationModelKeys: Inqueirer.DistinctChoice<Inqueirer.ListChoiceMap<any>>[] = [];
@@ -965,32 +980,29 @@ export namespace Prompts {
 			{
 				name: "key",
 				message: "Relation model key:",
-				type: "list",
-				choices: relationModelKeys,
+				type: "autocomplete",
+				source: (__, input) => {
+					const choices = relationModelKeys;
+					if (input) {
+						return _.filter(choices, (key: any) => key.name.toLowerCase().includes(input.toLowerCase()));
+					}
+					return choices;
+				}
 			},
 			{
-				name: "relationType",
-				message: "Type: ",
-				type: "list",
-				choices: [
-					{
-						name: "String",
-						value: "string"
-					},
-					{
-						name: "Number",
-						value: "number"
-					}
-				],
-				when: () => relationship === "belongsTo"
-			},
+				name: "required",
+				message: "Is it required?",
+				type: "confirm",
+				default: relationBeforeUpdate.required
+			}
 		]);
 		const updatedRelation: Templates.Models.Relation = {
 			name: relationUpdate.relationName ?? relation,
 			relationship,
-			type: relationship === "belongsTo" ? relationUpdate.relationType : relationship === "hasMany" ? "array" : "model",
+			type: relationship === "belongsTo" ? relationModelInstance.properties.find(relationUpdate.key)[0].type as any : relationship === "hasMany" ? "array" : "model",
 			model: relationModel,
-			key: relationUpdate.key
+			key: relationUpdate.key,
+			required: relationUpdate.required
 		}
 		const commitMessageExtraLines: string[] = [];
 		if (relationBeforeUpdate.name !== updatedRelation.name) commitMessageExtraLines.push(`- changes name from '${relationBeforeUpdate.name}' to '${updatedRelation.name}'`);

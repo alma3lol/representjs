@@ -1,4 +1,5 @@
 src
+dist/models
 index.ts
 tsconfig.*
 *.tsbuildinfo

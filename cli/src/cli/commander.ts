@@ -4,6 +4,7 @@ import { readFileSync, writeFileSync, existsSync } from 'fs';
 import {ModelTemplate} from '../templates';
 import {Models} from './models';
 import {Prompts} from './prompts';
+import {gitter} from './gitter';
 
 export const commander = new Command();
 
@@ -98,6 +99,7 @@ commander.command("interactive").description("Interactive mode lets you create/u
 			} else {
 				await Prompts.modelStartAction();
 			}
+			gitter.run();
 		}
 	})
 	.alias("i");
@@ -105,17 +107,20 @@ commander.command("interactive").description("Interactive mode lets you create/u
 commander.command("model").description("Create a model then exit")
 	.action(async () => {
 		await Prompts.modelStartAction();
+		gitter.run();
 	})
 	.alias("m");
 
 commander.command("property").description("Add/update/remove a property then exit")
 	.action(async () => {
 		await Prompts.propertiesStartAction();
+		gitter.run();
 	})
 	.alias("p");
 
 commander.command("relation").description("Add/update/remove a relation then exit")
 	.action(async () => {
 		await Prompts.relationsStartAction();
+		gitter.run();
 	})
 	.alias("r");

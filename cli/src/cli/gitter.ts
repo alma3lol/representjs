@@ -1,6 +1,9 @@
 import { v4 } from 'uuid';
+import { promisify }from 'util';
 import { exec } from 'child_process';
 import _ from 'lodash';
+
+const execAsync = promisify(exec);
 
 export type GitCommit = {
 	id: string
@@ -47,16 +50,12 @@ export class Gitter {
 	 */
 	run = () => {
 		if (!this.dryRun) {
-			this._commits.forEach(({ id, files, extraLines, message }) => {
-				exec(`git add ${_.join(files, " ")}`, (err, __, ___) => {
-					if (err) throw err;
-				});
+			this._commits.forEach(async ({ id, files, extraLines, message }) => {
+				await execAsync(`git add ${_.join(files, " ")}`);
 				let msg = message;
-				if (extraLines.length > 0) msg += `\n${_.join(extraLines, " ")}`;
+				if (extraLines.length > 0) msg += `\n${_.join(extraLines, `\n`)}`;
 				if (this.signoff !== "") msg += `\n${this.signoff}`;
-				exec(`git commit -m "${msg}"`, (err, __, ___) => {
-					if (err) throw err;
-				});
+				await execAsync(`git commit -m "${msg}"`);
 				this.uncommit(id);
 			});
 		}

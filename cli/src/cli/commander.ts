@@ -37,10 +37,12 @@ commander.command("interactive").description("Interactive mode lets you create/u
 				if (isProperty) {
 					const propAction = await Prompts.propertyAction();
 					let updatedModelInstance = modelInstance;
+					const commitMessageExtraLines: string[] = [];
 					if (propAction === "UPDATE_PROPERTY") {
 						updatedModelInstance = await Prompts.updatePropertyAction(updatedModelInstance, modelAction);
 					} else if (propAction === "DELETE_PROPERTY") {
 						updatedModelInstance.properties.remove(modelAction);
+						commitMessageExtraLines.push(`- removes property '${modelAction}'`);
 					} else {
 						// TODO: ADD CONVERT_PROPERTY HANDLER
 						console.error("NOT YET IMPLEMENTED");
@@ -49,13 +51,22 @@ commander.command("interactive").description("Interactive mode lets you create/u
 						`${commander.opts()['srcDir']}/${Models.generateFileName(updatedModelInstance.name)}.ts`,
 						updatedModelInstance.generate()
 					);
+					if (commitMessageExtraLines.length > 0) {
+						gitter.commit(
+							`refactor(models): refactors model '${action}'`,
+							[indexFilePath, `${commander.opts()['srcDir']}/${Models.generateFileName(action)}.ts`]
+						);
+					}
+					gitter.run();
 				} else if (isRelation) {
 					const relatAction = await Prompts.relationAction();
 					let updatedModelInstance = modelInstance;
+					const commitMessageExtraLines: string[] = [];
 					if (relatAction === "UPDATE_RELATION") {
 						updatedModelInstance = await Prompts.updateRelationAction(updatedModelInstance, modelAction);
 					} else if (relatAction === "DELETE_RELATION") {
 						updatedModelInstance.relations.remove(modelAction);
+						commitMessageExtraLines.push(`- removes relation '${modelAction}'`);
 					} else {
 						// TODO: ADD CONVERT_PROPERTY HANDLER
 						console.error("NOT YET IMPLEMENTED");
@@ -64,10 +75,22 @@ commander.command("interactive").description("Interactive mode lets you create/u
 						`${commander.opts()['srcDir']}/${Models.generateFileName(updatedModelInstance.name)}.ts`,
 						updatedModelInstance.generate()
 					);
+					if (commitMessageExtraLines.length > 0) {
+						gitter.commit(
+							`refactor(models): refactors model '${action}'`,
+							[indexFilePath, `${commander.opts()['srcDir']}/${Models.generateFileName(action)}.ts`]
+						);
+					}
+					gitter.run();
 				} else if (modelAction === "DELETE_MODEL") {
 					indexContent = Models.removeModelFromIndex(indexContent, action);
 					Models.deleteModel(action);
 					writeFileSync(indexFilePath, indexContent);
+					gitter.commit(
+						`refactor(models): deletes model '${action}'`,
+						[indexFilePath, `${commander.opts()['srcDir']}/${Models.generateFileName(action)}.ts`]
+					);
+					gitter.run();
 				} else {
 					const updateAction = await Prompts.updateModelAction();
 					if (updateAction === "NAME_URI") {
@@ -82,24 +105,27 @@ commander.command("interactive").description("Interactive mode lets you create/u
 							`${commander.opts()['srcDir']}/${Models.generateFileName(updatedModelInstance.name)}.ts`,
 							updatedModelInstance.generate()
 						);
+						gitter.run();
 					} else if (updateAction === "ADD_PROPERTY") {
 						const updatedModelInstance = await Prompts.newPropertyAction(modelInstance);
 						writeFileSync(
 							`${commander.opts()['srcDir']}/${Models.generateFileName(updatedModelInstance.name)}.ts`,
 							updatedModelInstance.generate()
 						);
+						gitter.run();
 					} else if (updateAction === "ADD_RELATION") {
 						const updatedModelInstance = await Prompts.newRelationAction(modelInstance);
 						writeFileSync(
 							`${commander.opts()['srcDir']}/${Models.generateFileName(updatedModelInstance.name)}.ts`,
 							updatedModelInstance.generate()
 						);
+						gitter.run();
 					}
 				}
 			} else {
 				await Prompts.modelStartAction();
+				gitter.run();
 			}
-			gitter.run();
 		}
 	})
 	.alias("i");

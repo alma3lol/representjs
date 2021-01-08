@@ -31,20 +31,23 @@ describe("Templates", () => {
 						key: "testid",
 						relationship: "hasOne",
 						type: "model",
+						required: true
 					},
 					{
 						name: "tests",
 						model: "AnotherTests",
 						key: "tests",
 						relationship: "hasMany",
-						type: "array"
+						type: "array",
+						required: true
 					},
 					{
 						name: "testId",
 						model: "TestParent",
 						key: "parentId",
 						relationship: "belongsTo",
-						type: "string"
+						type: "string",
+						required: false
 					}
 				]
 			});
@@ -62,7 +65,7 @@ export interface TestProps {
 export interface TestRelations {
 	testid: AnotherTest
 	tests: AnotherTests[]
-	testId: string
+	testId?: string
 }
 
 @Decorators.model({
@@ -96,7 +99,7 @@ export class Test extends Core.Model<Test> {
 		cls: TestParent,
 		key: 'parentId'
 	})
-	testId!: string;
+	testId?: string;
 }`);
 		});
 		it("should render a model template", () => {
@@ -113,7 +116,7 @@ export interface TestProps {
 export interface TestRelations {
 	testid: AnotherTest
 	tests: AnotherTest[]
-	testId: string
+	testId?: string
 }
 
 @Decorators.model({
@@ -147,7 +150,7 @@ export class Test extends Core.Model<Test> {
 		cls: TestParent,
 		key: 'parentId'
 	})
-	testId!: string;
+	testId?: string;
 }`;
 			const expected = new ModelTemplate({
 				table: "test",
@@ -160,20 +163,23 @@ export class Test extends Core.Model<Test> {
 						key: "testid",
 						relationship: "hasOne",
 						type: "model",
+						required: true
 					},
 					{
 						name: "tests",
 						model: "AnotherTests",
 						key: "tests",
 						relationship: "hasMany",
-						type: "array"
+						type: "array",
+						required: true
 					},
 					{
 						name: "testId",
 						model: "TestParent",
 						key: "parentId",
 						relationship: "belongsTo",
-						type: "string"
+						type: "string",
+						required: false
 					}
 				],
 				properties: [

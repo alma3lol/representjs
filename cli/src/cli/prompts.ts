@@ -813,10 +813,16 @@ export namespace Prompts {
 					name: "relationModel",
 					type: "autocomplete",
 					message: "Choose a model to relate:",
-					choices: otherModels.map(model => ({
-						name: model,
-						value: model
-					})),
+					source: (__, input) => {
+						const choices = otherModels.map(model => ({
+							name: model,
+							value: model
+						}));
+						if (input) {
+							return choices.filter(choice => choice.name.toLowerCase().includes(input.toLowerCase()));
+						}
+						return choices;
+					},
 					when: answer => answer.relationName
 				},
 				{

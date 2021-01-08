@@ -47,7 +47,7 @@ export class Gitter {
 	 */
 	run = () => {
 		if (!this.dryRun) {
-			this._commits.forEach(({ files, extraLines, message }) => {
+			this._commits.forEach(({ id, files, extraLines, message }) => {
 				exec(`git add ${_.join(files, " ")}`, (err, __, ___) => {
 					if (err) throw err;
 				});
@@ -57,6 +57,7 @@ export class Gitter {
 				exec(`git commit -m "${msg}"`, (err, __, ___) => {
 					if (err) throw err;
 				});
+				this.uncommit(id);
 			});
 		}
 	}

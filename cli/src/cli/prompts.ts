@@ -85,6 +85,10 @@ export namespace Prompts {
 			`${commander.opts()['srcDir']}/${Models.generateFileName(modelInstance.name)}.ts`,
 			modelInstance.generate()
 		);
+		gitter.commit(
+			`feat(models): creates new model '${modelInstance.name}'`,
+			[`${commander.opts()['srcDir']}/${Models.generateFileName(modelInstance.name)}.ts`]
+		);
 	}
 	/**
 	 * Prompt for properties start action

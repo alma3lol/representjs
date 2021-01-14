@@ -1,8 +1,9 @@
-import { unlinkSync, writeFileSync } from 'fs';
+import { unlinkSync, writeFileSync, readFileSync } from 'fs';
 import glob from 'glob';
 import _ from 'lodash';
 import { commander } from './commander';
 import {ModelTemplate} from '../templates';
+import {Reference} from './references';
 
 export namespace Models {
 	/**
@@ -123,5 +124,28 @@ export namespace Models {
 		model.properties.find().forEach(property => usedClassProps.push(property.name));
 		model.relations.find().forEach(relation => usedClassProps.push(relation.name));
 		return _.uniq(usedClassProps);
+	}
+	/**
+	 * Finds all model's references
+	 *
+	 * @param model Model to find references for
+	 *
+	 * @return array Array of references
+	 */
+	export const findAllReferences = (model: ModelTemplate) => {
+		const references: Reference[] = [];
+		getExistingModels().forEach(existingModelName => {
+			if (existingModelName !== model.name) {
+				const existingModelPath = `${commander.opts()['srcDir']}/${generateFileName(existingModelName)}.ts`;
+				const existingModelContent = readFileSync(existingModelPath).toString("utf8");
+				const existingModel = ModelTemplate.render(existingModelContent);
+				existingModel.relations.find().forEach(relation => {
+					if (relation.model === model.name) {
+						references.push(new Reference(existingModel, relation));
+					}
+				});
+			}
+		});
+		return references;
 	}
 }

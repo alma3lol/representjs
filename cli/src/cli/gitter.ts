@@ -51,11 +51,15 @@ export class Gitter {
 	run = () => {
 		if (!this.dryRun) {
 			this._commits.forEach(async ({ id, files, extraLines, message }) => {
-				await execAsync(`git add ${_.join(files, " ")}`);
+				try {
+					await execAsync(`git add ${_.join(files, " ")}`);
+				} catch (_) {}
 				let msg = message;
 				if (extraLines.length > 0) msg += `\n${_.join(extraLines, `\n`)}`;
 				if (this.signoff !== "") msg += `\n${this.signoff}`;
-				await execAsync(`git commit -m "${msg}"`);
+				try {
+					await execAsync(`git commit -m "${msg}"`);
+				} catch (_) {}
 				this.uncommit(id);
 			});
 		}

@@ -7,6 +7,7 @@ import {Templates} from '../types';
 import {commander} from './commander';
 import {readFileSync, writeFileSync, existsSync} from 'fs';
 import {gitter} from './gitter';
+import {Reference} from './references';
 
 Inqueirer.registerPrompt("autocomplete", require("inquirer-autocomplete-prompt"));
 
@@ -379,6 +380,7 @@ export namespace Prompts {
 		});
 		let idPropertyHasBeenTaken = _.find(model.properties.find(), { id: true }) ? true : false;
 		while(true) {
+			console.log(`Write a ${orange("blank line")} to exit`);
 			const property = await Inqueirer.prompt([
 				{
 					name: "propertyName",
@@ -529,8 +531,13 @@ export namespace Prompts {
 				propertyArrayType: prop.arrType
 			});
 		});
-		let idPropertyHasBeenTaken = _.find(model.properties.find(), { id: true }) ? true : false;
+		const idPropertyHasBeenTaken = _.find(model.properties.find(), { id: true }) ? true : false;
 		const propertyBeforeUpdate = model.properties.find(property)[0];
+		const references = Models.findAllReferences(model);
+		const propertyReferences: Reference[] = [];
+		references.forEach(reference => {
+			if (reference.relation.key === property) propertyReferences.push(reference);
+		});
 		const updatedProperty = await Inqueirer.prompt([
 			{
 				name: "propertyName",
@@ -658,6 +665,14 @@ export namespace Prompts {
 			updatedProp.required = true;
 			if (!propertyBeforeUpdate.id) commitMessageExtraLines.push("- marks property as ID");
 			else commitMessageExtraLines.push("- marks property as required");
+		}
+		if (commitMessageExtraLines.length > 0 && propertyReferences.length > 0) {
+			propertyReferences.forEach(reference => {
+				reference.update({
+					...reference.relation,
+					key: updatedProp.name,
+				});
+			});
 		}
 		model.properties.update(property, updatedProp);
 		gitter.commit(
